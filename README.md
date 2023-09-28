@@ -26,11 +26,12 @@ Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini
 Feel free to do whatever you want with it, I do not mind.
 * I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
 * If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
+* The GUI was inspired by [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) and [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript).
 
 ## Changes Made
 * Changed resolution from 1920x1080 to 1280x720. 
 * Changed config file to json.
-* Implemented uiautomator2 to detect crashes. Threshold are 60 clicks or 35 swipes.
+* Implemented uiautomator2 to detect crashes. Threshold are same consecutive 60 clicks or 35 swipes.(
 
 ## Bugs
 * Ascreencap does not work. Use uiautomator2 instead.
