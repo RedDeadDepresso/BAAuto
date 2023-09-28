@@ -10,7 +10,7 @@ If you are on the CN server you can check [MapleWithered/Sensei007](https://gith
 * Minimum: Medium at 30fps
 * Recommended: Medium, High or Very High at 60 fps. 
 * Lower settings may be possible with some changes to the script.
-Tested on Windows 11 with BlueStacks.
+* Tested on Windows 11 with BlueStacks.
 
 ## Installation and Usage
 1. Clone or download this repository.
