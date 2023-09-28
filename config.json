@@ -1,0 +1,121 @@
+{
+  "login": {
+    "enabled": true,
+    "network": "127.0.0.1:5557",
+    "screenshot_mode": "UIAUTOMATOR2",
+    "server": "EN",
+    "restart_attempts": 1
+  },
+  "farming": {
+    "enabled": true,
+    "bounty": {
+      "enabled": true,
+      "overpass": {
+        "stage": "04",
+        "run_times": 2
+      },
+      "desert_railroad": {
+        "stage": "04",
+        "run_times": 2
+      },
+      "classroom": {
+        "stage": "05",
+        "run_times": 2
+      }
+    },
+    "scrimmage": {
+      "enabled": true,
+      "trinity": {
+        "stage": "01",
+        "run_times": 3
+      },
+      "gehenna": {
+        "stage": "03",
+        "run_times": 3
+      },
+      "millennium": {
+        "stage": "03",
+        "run_times": 3
+      }
+    },
+    "tactical_challenge": {
+      "enabled": true,
+      "rank": "lowest"
+    },
+    "mission": {
+      "enabled": true,
+      "reset_daily": true,
+      "last_run": "2023-09-28 18:40:03",
+      "reset_time": "12:00:00",
+      "recharge_ap": true,
+      "preferred_template": "template1",
+      "queue": [
+        [
+          "E",
+          "08",
+          27
+        ]
+      ],
+      "event": true,
+      "templates": {
+        "template1": [
+          [
+            "H",
+            "5-1",
+            3
+          ],
+          [
+            "H",
+            "5-3",
+            3
+          ],
+          [
+            "H",
+            "4-3",
+            3
+          ],
+          [
+            "H",
+            "3-3",
+            3
+          ],
+          [
+            "H",
+            "2-2",
+            3
+          ],
+          [
+            "H",
+            "1-1",
+            3
+          ],
+          [
+            "H",
+            "1-3",
+            3
+          ],
+          [
+            "E",
+            "08",
+            30
+          ]
+        ]
+      }
+    }
+  },
+  "cafe": {
+    "enabled": true,
+    "invite_student": true,
+    "student_name": "Nodoka (Hot Spring)",
+    "tap_students": true,
+    "claim_earnings": true
+  },
+  "claim_rewards": {
+    "enabled": true,
+    "tasks": true,
+    "mailbox": true
+  },
+  "momotalk": {
+    "enabled": false
+  }
+}

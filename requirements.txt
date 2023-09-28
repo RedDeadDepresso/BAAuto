@@ -1,0 +1,10 @@
+imutils
+numpy
+opencv-python
+scipy
+lz4
+tqdm
+customtkinter
+uiautomator2
+pponnxcr
+Pillow
