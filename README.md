@@ -1,5 +1,5 @@
 # BAAuto
-A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the EN server.
+A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the EN server but it should be easy to implement new servers by changing the templates.
 If you are on the CN server you can check [MapleWithered/Sensei007](https://github.com/MapleWithered/Sensei007) (I was not aware of its existence before starting this project).
 
 ## Requirements on Windows
