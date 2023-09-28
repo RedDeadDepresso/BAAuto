@@ -6,6 +6,7 @@ If you are on the CN server you can check [MapleWithered/Sensei007](https://gith
 * Python 3.7.X installed and added to PATH.
 * Latest [ADB](https://developer.android.com/studio/releases/platform-tools) added to PATH.
 * ADB debugging enabled emulator with **1280x720 resolution** and **Android 5 or newer**.
+Graphics
 * Minimum: Medium at 30fps
 * Recommended: Medium, High or Very High at 60 fps. 
 * Lower settings may be possible with some changes to the script.
