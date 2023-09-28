@@ -50,49 +50,49 @@ class BAAuto(object):
             self.modules['claim_rewards'] = ClaimRewardsModule(self.config)
             
     def run_login_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the login cycle.
         """
         if self.modules['login']:
             return self.modules['login'].login_logic_wrapper
         return None
 
     def run_cafe_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the cafe cycle.
         """
         if self.modules['cafe']:
             return self.modules['cafe'].cafe_logic_wrapper
         return None
 
     def run_bounty_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the bounty cycle.
         """
         if self.modules['bounty']:
             return self.modules['bounty'].bounty_logic_wrapper
         return None
     
     def run_scrimmage_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the scrimmage cycle.
         """
         if self.modules['scrimmage']:
             return self.modules['scrimmage'].scrimmage_logic_wrapper
         return None
 
     def run_mission_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the mission cycle.
         """
         if self.modules['mission']:
             return self.modules['mission'].mission_logic_wrapper
         return None
     
     def run_tactical_challenge_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the tactica challenge cycle.
         """
         if self.modules['tactical_challenge']:
             return self.modules['tactical_challenge'].tactical_challenge_logic_wrapper
         return None
 
     def run_claim_rewards_cycle(self):
-        """Method to run the expedition cycle.
+        """Method to run the claim rewards cycle.
         """
         if self.modules['claim_rewards']:
             return self.modules['claim_rewards'].claim_rewards_logic_wrapper
