@@ -36,5 +36,5 @@ Feel free to do whatever you want with it, I do not mind.
 ## Bugs
 * Ascreencap does not work. Use uiautomator2 instead.
 * The GUI is a mess, in particularly the Mission/Commissions/Event section.
-* The script depends highly on time.spleep() making it sometimes slow.
+* The script depends highly on time.sleep() making it sometimes slow.
 * No implementation of data validation for the config.json. Script will most likely crash if the file is corrupted.
