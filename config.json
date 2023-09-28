@@ -114,8 +114,5 @@
     "enabled": true,
     "tasks": true,
     "mailbox": true
-  },
-  "momotalk": {
-    "enabled": false
   }
 }
