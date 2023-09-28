@@ -16,7 +16,7 @@ If you are on the CN server you can check [MapleWithered/Sensei007](https://gith
 1. Clone or download this repository.
 2. Install the required packages via `pip3` with the command `pip3 install -r requirements.txt`.
 3. Enable adb debugging on your emulator.
-4. Run `BAAuto` and change connection address to your emulator's adb port, then change the rest to your likings. 
+4. Run `BAAuto.py` and change connection address to your emulator's adb port, then change the rest to your likings. 
 5. Changes are automatically saved except for Mission/Commissions/Event in the Farming section
 6. For Event you have to upload a crop of the event banner from homescreen or campaign screen without any background in assets/EN/goto and save it as event_banner.png.
 Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
@@ -26,7 +26,7 @@ Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini
 Feel free to do whatever you want with it, I do not mind.
 * I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
 * If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
-* The GUI was inspired by [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) and [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript).
+* The GUI was inspired by [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) and [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript). It is just an interface to modify config.json and display script.py output.
 
 ## Changes Made
 * Changed resolution from 1920x1080 to 1280x720. 
