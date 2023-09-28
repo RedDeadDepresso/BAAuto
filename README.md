@@ -1,5 +1,5 @@
 # BAAuto
-A modified version of Egoistically's ALAuto adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the EN server.
+A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the EN server.
 If you are on the CN server you can check [MapleWithered/Sensei007](https://github.com/MapleWithered/Sensei007) (I was not aware of its existence before starting this project).
 
 ## Requirements on Windows
@@ -25,7 +25,7 @@ Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini
 Feel free to do whatever you want with it. I do not mind.
 * I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
 * If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
-* The GUI 
+
 ## Changes Made
 * Changed resolution from 1920x1080 to 1280x720. 
 * Changed config file to json.
