@@ -19,7 +19,7 @@ If you are on the CN server you can check [MapleWithered/Sensei007](https://gith
 4. Run `BAAuto.py` and change connection address to your emulator's adb port, then change the rest to your likings. 
 5. Changes are automatically saved except for Mission/Commissions/Event in the Farming section
 6. For Event you have to upload a crop of the event banner from homescreen or campaign screen without any background in assets/EN/goto and save it as event_banner.png.
-Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
+7. Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
 
 ## Relevant information
 * It started as a learning experience and a challenge for myself. However, I have been very busy lately so I am unsure to continue it. 
