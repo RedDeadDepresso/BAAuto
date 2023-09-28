@@ -31,7 +31,7 @@ Feel free to do whatever you want with it, I do not mind.
 ## Changes Made
 * Changed resolution from 1920x1080 to 1280x720. 
 * Changed config file to json.
-* Implemented uiautomator2 to detect crashes. Threshold are same consecutive 60 clicks or 35 swipes.(
+* Implemented uiautomator2 to detect crashes. Threshold are same consecutive 60 clicks or 35 swipes.
 
 ## Bugs
 * Ascreencap does not work. Use uiautomator2 instead.
