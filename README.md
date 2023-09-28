@@ -23,7 +23,7 @@ Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini
 
 ## Relevant information
 * It started as a learning experience and a challenge for myself. However, I have been very busy lately so I am unsure to continue it. 
-Feel free to do whatever you want with it. I do not mind.
+Feel free to do whatever you want with it, I do not mind.
 * I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
 * If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
 
