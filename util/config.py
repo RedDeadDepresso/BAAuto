@@ -73,7 +73,7 @@ class Config(object):
         self.validate()
 
         if (self.ok and not self.initialized):
-            Logger.log_msg("Starting Bas!")
+            Logger.log_msg("Starting BAAuto!")
             self.initialized = True
             self.changed = True
         elif (not self.ok and not self.initialized):

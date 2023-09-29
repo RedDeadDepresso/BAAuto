@@ -1050,14 +1050,14 @@ class GoTo(object):
         """
         while True:
             Utils.wait_update_screen(1)
-            if not Utils.find('goto/settings'):
-                Utils.wait_update_screen(1)
             if Utils.find(cls.home_subsections[section]['template'], color=True):
                 break
             elif Utils.find('goto/home', color=True):
                 Utils.touch(*cls.home_subsections[section]['click_position'])
             elif Utils.find('goto/skip'):
                 Utils.touch(765, 500)
+            if not Utils.find('goto/menu') and not Utils.find('goto/settings'):
+                continue
             else:
                 Utils.touch(*cls.back_button)
 
@@ -1070,8 +1070,6 @@ class GoTo(object):
         """
         while True:
             Utils.wait_update_screen(1)
-            if not Utils.find('goto/settings'):
-                Utils.wait_update_screen(1)
             if Utils.find(cls.campaign_subsections[section]['template'], color=True):
                 break
             elif Utils.find('goto/campaign', color=True):
@@ -1080,6 +1078,8 @@ class GoTo(object):
                 cls.sub_home('campaign')
             elif Utils.find('goto/skip'):
                 Utils.touch(765, 500)
+            elif not Utils.find('goto/menu') and not Utils.find('goto/settings'):
+                continue
             else:
                 Utils.touch(*cls.back_button)
 
@@ -1087,11 +1087,9 @@ class GoTo(object):
     def event(cls):
         while True:
             Utils.wait_update_screen(1)
-            if not Utils.find('goto/settings'):
-                Utils.wait_update_screen(1)
             if Utils.find('goto/event', color=True):
                 break
-            if Utils.find_and_touch('goto/event_banner'):
+            elif Utils.find_and_touch('goto/event_banner'):
                 continue
             elif Utils.find("goto/campaign", color=True):
                 Utils.swipe(40,160, 260, 40)
@@ -1099,5 +1097,7 @@ class GoTo(object):
                 cls.sub_home('campaign')
             elif Utils.find('goto/skip'):
                 Utils.touch(765, 500)
+            elif not Utils.find('goto/menu') and not Utils.find('goto/settings'):
+                continue
             else:
                 Utils.touch(*cls.back_button)
