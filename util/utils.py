@@ -964,7 +964,7 @@ class Utils(object):
         plus = (1035, 295)
         sweep_status = ('success')
         last_current = None
-        if cls.find('menu/stars_required'):
+        if cls.find('farming/stars_required'):
             Logger.log_error('3 stars not achieved. Unable to sweep')
             sweep_status = ('failed')
             return sweep_status
@@ -997,13 +997,13 @@ class Utils(object):
             if current == num:
                 while True:
                     Utils.update_screen()
-                    if Utils.find('menu/sweep'):
+                    if Utils.find('farming/sweep'):
                         Utils.touch(940, 400)
                         continue
-                    if Utils.find('menu/confirm'):
+                    if Utils.find('farming/confirm'):
                         Utils.touch(770, 500)
                         continue
-                    if Utils.find('menu/sweep_complete'):
+                    if Utils.find('farming/sweep_complete'):
                         if sweep_status[0] == 'success':
                             Logger.log_success('Sweep completed successfully')
                         return sweep_status

@@ -51,11 +51,11 @@ class BountyModule(object):
 
             if stage_region:
                 # Find and touch the "Enter" button for the stage
-                button = Utils.find_button('bounty/enter', stage_region, self.region['stage_list'])
+                button = Utils.find_button('farming/small_enter', stage_region, self.region['stage_list'])
                 if button:
                     while True:
                         Utils.wait_update_screen(1)
-                        if not Utils.find('menu/sweep'):
+                        if not Utils.find('farming/sweep'):
                             Utils.touch_randomly(button)
                             continue
                         Utils.sweep(locations_queue[entry]["run_times"])  # Perform the sweep action

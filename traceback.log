@@ -2,14 +2,10 @@
 Traceback (most recent call last):
   File "C:\Users\mizan\Documents\GitHub\BAAuto\script.py", line 183, in <module>
     enabled()
-  File "C:\Users\mizan\Documents\GitHub\BAAuto\modules\mission.py", line 73, in mission_logic_wrapper
-    current_ap, max_ap = self.read_ap(location)
-                         ^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\mizan\Documents\GitHub\BAAuto\modules\mission.py", line 198, in read_ap
-    return [int(x) for x in [x.strip() for x in ap.split('/')]]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\mizan\Documents\GitHub\BAAuto\modules\mission.py", line 198, in <listcomp>
-    return [int(x) for x in [x.strip() for x in ap.split('/')]]
-            ^^^^^^
-ValueError: invalid literal for int() with base 10: 'elat least'
+  File "C:\Users\mizan\Documents\GitHub\BAAuto\modules\mission.py", line 79, in mission_logic_wrapper
+    self.recharge_ap()
+  File "C:\Users\mizan\Documents\GitHub\BAAuto\modules\mission.py", line 202, in recharge_ap
+    if self.config.mission['recharge_ap']['cafe']:
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+TypeError: 'bool' object is not subscriptable
 

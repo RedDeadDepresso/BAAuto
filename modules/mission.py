@@ -104,11 +104,11 @@ class MissionModule(object):
                 Logger.log_warning(f'Hard {stage} was set to be swept {run_times}. Reset to 3 as it surpass limit.')
                 run_times = 3
 
-            while Utils.find('mission/normal'):
+            while Utils.find('farming/normal'):
                 Utils.touch(1065, 160)
                 Utils.update_screen()
         else:
-            while not Utils.find('mission/normal'):
+            while not Utils.find('farming/normal'):
                 Utils.touch(915, 160)
                 Utils.wait_update_screen(1)
 
@@ -135,7 +135,7 @@ class MissionModule(object):
             Logger.log_info(f'Current stage: {self.acronym[mode]} {stage}, run {run_times} times')
             if os.path.exists(event_banner_path):
                 GoTo.event()
-                while Utils.find_and_touch('mission/quest'):
+                while Utils.find_and_touch('farming/quest'):
                     Utils.wait_update_screen(1)
                 return self.attempt_stage(mode, stage, run_times)
             else:
@@ -171,14 +171,14 @@ class MissionModule(object):
 
         if stage_region:
             if mode in ['H', 'E']:
-                button = Utils.find_button('mission/hard_enter', stage_region, self.region['stage_list'])
+                button = Utils.find_button('farming/big_enter', stage_region, self.region['stage_list'])
             else:
-                button = Utils.find_button('bounty/enter', stage_region, self.region['stage_list'])
+                button = Utils.find_button('farming/small_enter', stage_region, self.region['stage_list'])
 
             if button:
                 while True:
                     Utils.update_screen()
-                    if not Utils.find('menu/sweep'):
+                    if not Utils.find('farming/sweep'):
                         Utils.touch_randomly(button)
                         continue
                     return Utils.sweep(run_times)
