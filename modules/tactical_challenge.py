@@ -1,6 +1,7 @@
 from util.logger import Logger
 from util.utils import Utils, Region, GoTo
 from tqdm import tqdm
+import re
 
 class TacticalChallengeModule(object):
     def __init__(self, config):
@@ -17,19 +18,24 @@ class TacticalChallengeModule(object):
 
         # Define regions for various elements on the screen
         self.region = {
-            'tickets': Region(208, 472, 44, 33),
-            'option_1': Region(702, 198, 64, 42),
-            'option_2': Region(702, 364, 57, 33),
-            'option_3': Region(702, 511, 63, 44),
-            'formation': Region(560, 550, 165, 25),
-            'mobilise': Region(1100, 640, 130, 55),
+            'tickets' : None,
+            'rival_1': Region(702, 198, 64, 42),
+            'rival_2': Region(702, 364, 57, 33),
+            'rival_3': Region(702, 511, 63, 44),
             'outcome': Region(405, 240, 465, 210)
         }
+
+    def determine_tickets_region(self):
+        if Utils.assets == 'EN':
+            self.region['tickets'] = Region(208, 472, 44, 33),
+        elif Utils.assets == 'CN':
+            self.region['tickets'] = Region(156,470, 54, 45)
 
     def tactical_challenge_logic_wrapper(self):
         # Go to the tactical challenge sub-campaign
         GoTo.sub_campaign('tactical_challenge')
         self.claim()
+        self.determine_tickets_region()
         ticket_owned = self.read_tickets()
         
         while ticket_owned:
@@ -39,8 +45,7 @@ class TacticalChallengeModule(object):
                 Utils.wait_update_screen()
                 
                 # Check if the formation screen is displayed
-                if Utils.find('tactical_challenge/formation'):
-                    Utils.touch_randomly(self.region['formation'])
+                if Utils.find_and_touch('tactical_challenge/formation'):
                     continue
                 
                 # Check if there are no tickets available
@@ -56,7 +61,7 @@ class TacticalChallengeModule(object):
                     if not ticket_owned:
                         return
                     
-                    self.progress_bar(59)
+                    self.progress_bar(45)
                     break
                 
                 # Check if there are no tickets left
@@ -92,13 +97,14 @@ class TacticalChallengeModule(object):
         # Find and select a match based on rank preference
         Utils.touch(1160, 145)
         Utils.wait_update_screen(2)
+        extract_integer = lambda input_string: int(re.search(r'\d+', input_string).group()) if re.search(r'\d+', input_string) else None
         options = [
-            [self.region['option_1'], Utils.scan(self.region['option_1'])[0]['text']],
-            [self.region['option_2'], Utils.scan(self.region['option_2'])[0]['text']],
-            [self.region['option_3'], Utils.scan(self.region['option_3'])[0]['text']]
+            [self.region['rival_1'], extract_integer(Utils.scan(self.region['rival_1'])[0]['text'])],
+            [self.region['rival_2'], extract_integer(Utils.scan(self.region['rival_2'])[0]['text'])],
+            [self.region['rival_3'], extract_integer(Utils.scan(self.region['rival_3'])[0]['text'])]
         ]
         Logger.log_info(f'Ranks detected: {options[0][1]}, {options[1][1]}, {options[2][1]}')
-        options.sort(key=lambda x: int(x[1]), reverse=True)
+        options.sort(key=lambda x: x[1], reverse=True)
 
         if self.rank.lower() == "highest":
             match = options[2]
@@ -126,9 +132,8 @@ class TacticalChallengeModule(object):
             Utils.update_screen()
             
             # Check if the mobilize button is still available
-            if Utils.find('tactical_challenge/mobilise'):
-                Utils.touch_randomly(self.region['mobilise'])
-                
+            if Utils.find_and_touch('tactical_challenge/mobilise'):
+                continue                
             # Check if the battle result screen is displayed
             if Utils.find('tactical_challenge/battle result'):
                 outcome = Utils.find_word('lose', self.region['outcome'])
