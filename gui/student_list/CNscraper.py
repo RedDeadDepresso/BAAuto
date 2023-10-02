@@ -55,7 +55,7 @@ def main():
     # Now student_names contains all the collected student names
     student_names = list(student_names)
     student_names.sort()
-    with open("CN_student_list.json", "w") as f:
+    with open("CN.json", "w") as f:
         json.dump(student_names, f, indent=2)
 
 if __name__ == '__main__':
