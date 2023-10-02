@@ -19,9 +19,9 @@ class TacticalChallengeModule(object):
         # Define regions for various elements on the screen
         self.region = {
             'tickets' : None,
-            'rival_1': Region(702, 198, 64, 42),
-            'rival_2': Region(702, 364, 57, 33),
-            'rival_3': Region(702, 511, 63, 44),
+            'rival_1': Region(615, 190, 150, 60), 
+            'rival_2': Region(615, 345, 150, 60),
+            'rival_3': Region(615, 505, 150, 60),
             'outcome': Region(405, 240, 465, 210)
         }
 
