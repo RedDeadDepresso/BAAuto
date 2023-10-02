@@ -21,12 +21,18 @@ class BountyModule(object):
 
         # Define regions for various elements on the screen
         self.region = {
+            'tickets': None,
             'overpass': (800,200),
             'desert_railroad': (800,310),
             'classroom': (800, 410),
-            'tickets': Region(225, 75, 45, 45),
             'stage_list': Region(677, 132, 747, 678)
         }
+        
+    def determine_tickets_region(self):
+        if Utils.assets == 'EN':
+            self.region['tickets'] = Region(225, 75, 45, 45)
+        elif Utils.assets == 'CN':
+            self.region['tickets'] = Region(155,80, 50, 40)
 
     def bounty_logic_wrapper(self):
         # Navigate to the Bounty campaign
@@ -37,6 +43,7 @@ class BountyModule(object):
         if locations_queue == {}:
             Logger.log_warning = "Bounty was enabled but all locations run times were set to 0. Unable to proceed."
             return
+        self.determine_tickets_region()
         if Utils.scan(self.region["tickets"],resize=True)[0]["text"].strip() == "0/6":
             Logger.log_warning("Not Enough tickets to run bounty.")
             return

@@ -147,6 +147,7 @@ try:
         Utils.assets = config.assets
         # screencap init
         Utils.init_screencap_mode(config.screenshot_mode)
+        Utils.init_ocr_mode()
         Utils.record['restart_attempts'] = config.restart_attempts
     else:
         Logger.log_error('Unable to connect to the service.')

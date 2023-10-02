@@ -231,7 +231,7 @@ class LoginFrame(customtkinter.CTkFrame):
         self.server_label = customtkinter.CTkLabel(self, text="Server:", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.server_label.grid(row=5, column=0, padx=20, pady=(20, 10))
 
-        self.server_dropdown = customtkinter.CTkOptionMenu(self, values=["EN"], command=lambda x,y=["login","server"]: self.config.save_to_json(y))
+        self.server_dropdown = customtkinter.CTkOptionMenu(self, values=["EN", "CN"], command=lambda x,y=["login","server"]: self.config.save_to_json(y))
         self.server_dropdown.grid(row=6, column=0, padx=20, pady=(20, 10))
 
         self.config.widgets["login"]["server"] = self.server_dropdown

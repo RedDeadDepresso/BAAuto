@@ -98,14 +98,7 @@ class Utils(object):
     DEFAULT_SIMILARITY = 0.9
     assets = ''
     locations = ()
-    # https://github.com/hgjazhgj/pponnxcr
-    server_to_ocr = {   
-    "ZHS": 'zhs',
-    "ZHT":'zht',
-    "JP":'ja',
-    "EN":'en'
-    }
-    ocr = TextSystem("en")
+    ocr = None
     record = {
         'last_touch':[None, 0],
         'last_swipe':[None, 0],
@@ -138,6 +131,17 @@ class Utils(object):
                     Logger.log_warning('Since aScreenCap is not ready, falling back to normal adb screencap')
                     Utils.useAScreenCap = False
             Adb.shell('chmod 0777 /data/local/tmp/ascreencap')
+
+    @classmethod
+    def init_ocr_mode(cls):
+        # https://github.com/hgjazhgj/pponnxcr
+        server_to_ocr = {   
+        "ZHS": 'zhs',
+        "CN":'zht',
+        "JP":'ja',
+        "EN":'en'
+        }
+        cls.ocr = TextSystem(server_to_ocr[cls.assets])
 
     @staticmethod
     def reposition_byte_pointer(byteArray):
@@ -1028,6 +1032,8 @@ class GoTo(object):
 
     home_button = (1235, 21)
     back_button = (55,40)
+    skip_confirm_button = (765, 500)
+    wake_up_coords = (475, 20) # coords to touch to show widgets/skip lobby in the homescreen
     
     @classmethod
     def home(cls):
@@ -1037,7 +1043,7 @@ class GoTo(object):
             if Utils.find('goto/home', color=True):
                 break
             elif Utils.find('goto/skip'):
-                Utils.touch(765, 500)
+                Utils.touch(*cls.skip_confirm_button)
             else:
                 Utils.touch(*cls.home_button)
 
@@ -1048,6 +1054,7 @@ class GoTo(object):
         Args:
             section (str): The name of the subsection.
         """
+        waiting_time = 0
         while True:
             Utils.wait_update_screen(1)
             if Utils.find(cls.home_subsections[section]['template'], color=True):
@@ -1055,11 +1062,16 @@ class GoTo(object):
             elif Utils.find('goto/home', color=True):
                 Utils.touch(*cls.home_subsections[section]['click_position'])
             elif Utils.find('goto/skip'):
-                Utils.touch(765, 500)
-            if not Utils.find('goto/menu') and not Utils.find('goto/settings'):
+                Utils.touch(*cls.skip_confirm_button)
+            elif waiting_time < 5 and not Utils.find('goto/settings'):
+                Utils.touch(*cls.wake_up_coords)
+                waiting_time += 1
                 continue
+            elif waiting_time == 5:
+                cls.home()
             else:
                 Utils.touch(*cls.back_button)
+            waiting_time = 0
 
     @classmethod
     def sub_campaign(cls, section):
@@ -1068,6 +1080,7 @@ class GoTo(object):
         Args:
             section (str): The name of the subsection.
         """
+        waiting_time = 0
         while True:
             Utils.wait_update_screen(1)
             if Utils.find(cls.campaign_subsections[section]['template'], color=True):
@@ -1077,14 +1090,21 @@ class GoTo(object):
             elif Utils.find('goto/home', color=True):
                 cls.sub_home('campaign')
             elif Utils.find('goto/skip'):
-                Utils.touch(765, 500)
-            elif not Utils.find('goto/menu') and not Utils.find('goto/settings'):
+                Utils.touch(*cls.skip_confirm_button)
+            elif waiting_time < 5 and not Utils.find('goto/settings'):
+                Utils.touch(*cls.wake_up_coords)
+                waiting_time += 1
                 continue
+            elif waiting_time == 5:
+                cls.home()
             else:
                 Utils.touch(*cls.back_button)
+            waiting_time = 0
+
 
     @classmethod
     def event(cls):
+        waiting_time = 0
         while True:
             Utils.wait_update_screen(1)
             if Utils.find('goto/event', color=True):
@@ -1096,8 +1116,13 @@ class GoTo(object):
             elif Utils.find('goto/home', color=True):
                 cls.sub_home('campaign')
             elif Utils.find('goto/skip'):
-                Utils.touch(765, 500)
-            elif not Utils.find('goto/menu') and not Utils.find('goto/settings'):
+                Utils.touch(*cls.skip_confirm_button)
+            elif waiting_time < 5 and not Utils.find('goto/settings'):
+                Utils.touch(*cls.wake_up_coords)
+                waiting_time += 1
                 continue
+            elif waiting_time == 5:
+                cls.home()
             else:
                 Utils.touch(*cls.back_button)
+            waiting_time = 0

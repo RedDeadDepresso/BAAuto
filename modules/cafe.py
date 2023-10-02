@@ -88,7 +88,7 @@ class CafeModule(object):
                         Utils.wait_update_screen(1)
                         
                         # Confirm the invitation
-                        if Utils.find_and_touch('menu/confirm'):
+                        if Utils.find_and_touch('cafe/confirm'):
                             break
                         Utils.touch_randomly(button)
                 else:
