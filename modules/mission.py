@@ -199,7 +199,7 @@ class MissionModule(object):
 
     def recharge_ap(self):
         # Recharge AP if configured to do so
-        if self.config.mission['recharge_ap']['cafe']:
+        if self.config.mission['recharge_ap']:
             GoTo.sub_home('cafe')
             while True:
                 Utils.wait_update_screen(1)
@@ -208,8 +208,6 @@ class MissionModule(object):
                 else:
                     Utils.touch(640, 520)
                     break
-
-        if self.config.mission['recharge_ap']['claim_rewards']:
             from modules.claim_rewards import ClaimRewardsModule
             ClaimRewardsModule(self.config).claim_rewards_logic_wrapper()
 
