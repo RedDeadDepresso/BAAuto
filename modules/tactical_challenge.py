@@ -49,8 +49,7 @@ class TacticalChallengeModule(object):
                     continue
                 
                 # Check if there are no tickets available
-                if Utils.find('tactical_challenge/no tick'):
-                    Utils.touch(1106, 600)
+                if Utils.find_and_touch('tactical_challenge/no_tick'):
                     continue
                 
                 # Check if the mobilize button is available
@@ -65,7 +64,7 @@ class TacticalChallengeModule(object):
                     break
                 
                 # Check if there are no tickets left
-                if Utils.find('tactical_challenge/no tickets'):
+                if Utils.find('tactical_challenge/no_tickets'):
                     Logger.log_warning(f'Run out of tickets')
                     return
 
