@@ -3,7 +3,7 @@
     "enabled": false,
     "network": "127.0.0.1:5557",
     "screenshot_mode": "UIAUTOMATOR2",
-    "server": "CN",
+    "server": "EN",
     "restart_attempts": 1
   },
   "farming": {
@@ -39,11 +39,11 @@
       }
     },
     "tactical_challenge": {
-      "enabled": false,
+      "enabled": true,
       "rank": "lowest"
     },
     "mission": {
-      "enabled": true,
+      "enabled": false,
       "reset_daily": true,
       "last_run": "2023-10-02 23:18:02",
       "reset_time": "12:00:00",

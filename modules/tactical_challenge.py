@@ -27,7 +27,7 @@ class TacticalChallengeModule(object):
 
     def determine_tickets_region(self):
         if Utils.assets == 'EN':
-            self.region['tickets'] = Region(208, 472, 44, 33),
+            self.region['tickets'] = Region(208, 472, 44, 33)
         elif Utils.assets == 'CN':
             self.region['tickets'] = Region(156,470, 54, 45)
 
@@ -134,7 +134,7 @@ class TacticalChallengeModule(object):
             if Utils.find_and_touch('tactical_challenge/mobilise'):
                 continue                
             # Check if the battle result screen is displayed
-            if Utils.find('tactical_challenge/battle result'):
+            if Utils.find('tactical_challenge/battle_result'):
                 outcome = Utils.find_word('lose', self.region['outcome'])
                 
                 if outcome[0]:
