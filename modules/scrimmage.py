@@ -65,7 +65,13 @@ class ScrimmageModule(object):
                         if not Utils.find('farming/sweep'):
                             Utils.touch_randomly(button)
                             continue
-                        Utils.sweep(locations_queue[entry]["run_times"])  # Perform the sweep action
+                        outcome = Utils.sweep(locations_queue[entry]["run_times"])  # Perform the sweep action
+                        if outcome[0] == "incomplete":
+                            if outcome[1] == 0:
+                                Logger.log_warning("Not enough tickets to complete sweep")
+                            else:
+                                Logger.log_warning(f'Ran out of tickets but enough to complete stage {outcome[1]} times instead of {locations_queue[entry]["run_times"]}')
+                            return
                         break
                 else:
                     Logger.log_msg(f'Error: {entry.capitalize()}-{self.stage[entry]["stage"]} not unlocked')

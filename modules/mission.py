@@ -181,7 +181,10 @@ class MissionModule(object):
                     if not Utils.find('farming/sweep'):
                         Utils.touch_randomly(button)
                         continue
-                    return Utils.sweep(run_times)
+                    outcome = Utils.sweep(run_times)
+                    if outcome[0] == "incomplete" and outcome[1] != 0:
+                        Logger.log_warning(f'Ran out of AP but enough to complete stage {outcome[1]} times instead of {run_times}')
+                    return outcome
             else:
                 Logger.log_error(f'{self.acronym[mode]} {stage} is not unlocked')
                 return ('failed')
