@@ -341,7 +341,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.preferred_template_optionmenu = customtkinter.CTkOptionMenu(self, values=self.templates_list, command=lambda x, y=["farming","mission","preferred_template"]: self.config.save_to_json(y))
         self.preferred_template_optionmenu.grid(row=16, column=1, pady=20)
         self.config.widgets["farming"]["mission"]["preferred_template"] = self.preferred_template_optionmenu
-        self.mission_tabview = customtkinter.CTkTabview(self)
+        self.mission_tabview = customtkinter.CTkTabview(self, height=500)
         self.mission_tabview.grid(row=17, column=0, columnspan=3, padx=20)
         self.tab_template = self.mission_tabview.add('Template')
         self.tab_queue = self.mission_tabview.add('Queue')
@@ -372,9 +372,9 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             # Add button to save data
             self.save_button = customtkinter.CTkButton(self.template_buttons_frame, text="Save", command=lambda queue=queue: self.save_data(queue=queue))
             self.save_button.grid(row=0, column=2, padx=5, pady=5)
-        self.template_frame = customtkinter.CTkScrollableFrame(self.tab_template, width=400)
+        self.template_frame = customtkinter.CTkScrollableFrame(self.tab_template, width=400, height=350)
         self.template_frame.grid(row=1, column=0, sticky="nsew")
-        self.queue_frame = customtkinter.CTkScrollableFrame(self.tab_queue, width=400)
+        self.queue_frame = customtkinter.CTkScrollableFrame(self.tab_queue, width=400, height=350)
         self.queue_frame.grid(row=1, column=0, sticky="nsew")
 
         # Create a list to store frame widgets
@@ -598,12 +598,13 @@ class App(customtkinter.CTk):
 
     def configure_window(self):
         self.title("BAAuto")
-        self.geometry(f"{1500}x{750}")
+        self.geometry(f"{1500}x{850}")
         self.iconbitmap('gui/assets/karin.ico')
         self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1, minsize=766)
-        self.grid_columnconfigure(2, weight=1, minsize=820)
+        self.grid_columnconfigure(1, weight=1, minsize=510)
+        self.grid_columnconfigure(2, weight=1, minsize=546)
         self.grid_rowconfigure(0, weight=1)
+        customtkinter.set_widget_scaling(1)
 
 if __name__ == "__main__":
     app = App()
