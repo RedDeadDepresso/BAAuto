@@ -1,7 +1,7 @@
 # BAAuto
 A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the Global server with support for English and Chinese language, but it should be easy to implement new servers by changing the templates.
 
-UPDATE: Someone is making one with more features planned than mine https://github.com/MaaAssistantArknights/MBA; I will try to finish BAAuto for sake of completeness.
+UPDATE: Someone is making one with more features planned than mine https://github.com/MaaAssistantArknights/MBA.
 
 ## Requirements on Windows
 * Python 3.7.X installed and added to PATH.
