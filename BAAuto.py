@@ -7,7 +7,7 @@ import customtkinter
 import sys
 from gui import *
 import random
-
+import ctypes
 
 class Config:
     def __init__(self, linker, config_file):
@@ -77,6 +77,7 @@ class Config:
     
 class Linker:
     def __init__(self):
+        self.capitalise = lambda word: " ".join(x.title() for x in word.split("_"))        
         self.config = None
         self.widgets = {}
         self.modules_dictionary = {}
@@ -84,6 +85,13 @@ class Linker:
         self.log_textbox = None
         self.p = None
 
+    def switch_student_list(self):
+        server = self.config.config_data["login"]["server"]
+        with open(f"gui/student_list/{server}.json", "r") as f:
+            student_list = json.load(f)
+        cafe_frame = self.modules_dictionary["cafe"]["frame"]
+        cafe_frame.student_dropdown.configure(values=student_list)
+        
     def start_stop(self):
         if hasattr(self, 'p') and self.p is not None:
             # If process is running, terminate it
@@ -118,21 +126,21 @@ class Linker:
         self.p = None
 
     def switch_queue_state(self, state):
-        farmingframe = self.modules_dictionary["farming"]["frame"]
-        for button in farmingframe.queue_buttons:
+        farming_frame = self.modules_dictionary["farming"]["frame"]
+        for button in farming_frame.queue_buttons:
             button.configure(state=state)
         self.update_queue()
-        for frame in farmingframe.queue_frames:
+        for frame in farming_frame.queue_frames:
             for widget in frame.winfo_children():
                 widget.configure(state=state)
 
     def update_queue(self):
-        farmingframe = self.modules_dictionary["farming"]["frame"]
-        farmingframe.clear_frames(queue=True)
+        farming_frame = self.modules_dictionary["farming"]["frame"]
+        farming_frame.clear_frames(queue=True)
         new_config_data = self.config.read()
         self.config.config_data["farming"]['mission']['queue'] = new_config_data["farming"]['mission']['queue']
         for entry in self.config.config_data["farming"]['mission']['queue']:
-            farmingframe.add_frame(entry, queue=True)
+            farming_frame.add_frame(entry, queue=True)
 
 class Sidebar(customtkinter.CTkFrame):
     def __init__(self, master, linker, config, **kwargs):
@@ -154,8 +162,6 @@ class Sidebar(customtkinter.CTkFrame):
         self.checkbox_frame = customtkinter.CTkFrame(self, fg_color="transparent", border_color="white", border_width=2)
         self.checkbox_frame.grid(row=1, column=0, columnspan=4, padx=10, pady=10, sticky="w")
 
-        self.capitalise = lambda word: " ".join(x.title() for x in word.split("_"))        
-
         self.module_list = [["login", LoginFrame], ["cafe", CafeFrame], ["farming", FarmingFrame], ["claim_rewards", ClaimRewardsFrame]]               
         for index, sublist in enumerate(self.module_list):
             module = sublist[0]
@@ -171,7 +177,7 @@ class Sidebar(customtkinter.CTkFrame):
 
     def create_module_checkbox(self, module, i):
         self.linker.modules_dictionary[module]['checkbox'] = customtkinter.CTkCheckBox(
-            self.checkbox_frame, text=self.capitalise(module), text_color="#FFFFFF", font=("Inter", 16), command=lambda x=[module, "enabled"]: self.config.save_to_json(x))
+            self.checkbox_frame, text=self.linker.capitalise(module), text_color="#FFFFFF", font=("Inter", 16), command=lambda x=[module, "enabled"]: self.config.save_to_json(x))
         self.linker.modules_dictionary[module]['checkbox'].grid(row=i, column=0, columnspan=2,padx=20, pady=(10, 5), sticky="nw")
         self.linker.widgets[module]['enabled'] = self.linker.modules_dictionary[module]['checkbox']
 
@@ -255,7 +261,7 @@ class LoginFrame(customtkinter.CTkFrame):
         self.server_label = customtkinter.CTkLabel(self, text="Server:", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.server_label.grid(row=5, column=0, padx=20, pady=(20, 10))
 
-        self.server_dropdown = customtkinter.CTkOptionMenu(self, values=["EN", "CN"], command=lambda x,y=["login","server"]: self.config.save_to_json(y))
+        self.server_dropdown = customtkinter.CTkOptionMenu(self, values=["EN", "CN"], command=lambda x,y=["login","server"]: (self.config.save_to_json(y), self.linker.switch_student_list()))
         self.server_dropdown.grid(row=6, column=0, padx=20, pady=(20, 10))
 
         self.linker.widgets["login"]["server"] = self.server_dropdown
@@ -263,6 +269,7 @@ class LoginFrame(customtkinter.CTkFrame):
     def create_restart_attempts_widgets(self):
         self.restart_attempts_label = customtkinter.CTkLabel(self, text="Restart attempts", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.restart_attempts_label.grid(row=7, column=0, padx=20, pady=(20, 10))
+        self.restart_attempts_tootltip = CTkToolTip(self.restart_attempts_label, message="Sets the number of restart attempts allowed to the script. Restart attempts are triggered when the game crashes or freezes.")
 
         self.restart_attempts_spinbox = IntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["login", "restart_attempts"]:self.config.save_to_json(x))
         self.restart_attempts_spinbox.entry.bind("<KeyRelease>", lambda event, x=["login", "restart_attempts"]: self.config.save_to_json(x))
@@ -275,24 +282,43 @@ class CafeFrame(customtkinter.CTkFrame):
         super().__init__(master, **kwargs)
         self.linker = linker
         self.config = config
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.create_cafe_settings_label()
+        self.create_invite_student_widgets()
+        self.create_tap_students_widgets()
+        self.create_claim_earnings_widgets()
+
+    def create_cafe_settings_label(self):
         self.cafe_settings_label = customtkinter.CTkLabel(self, text="Cafe Settings", font=customtkinter.CTkFont(family="Inter", size=30, weight="bold"))
         self.cafe_settings_label.grid(row=0, column=0, sticky="nw", padx=20, pady=20)
-        self.invite_checkbox = customtkinter.CTkCheckBox(self, text="Invite student", font=customtkinter.CTkFont(family="Inter", size=20), command= lambda x=["cafe", "invite_student"]: self.config.save_to_json(x))
+
+    def create_invite_student_widgets(self):
+        self.invite_checkbox = customtkinter.CTkCheckBox(self, text="Invite student", font=customtkinter.CTkFont(family="Inter", size=20), command=lambda x=["cafe", "invite_student"]: self.config.save_to_json(x))
         self.invite_checkbox.grid(row=1, column=0, pady=(20, 0), padx=20, sticky="nw")
+
         self.student_entry = customtkinter.CTkComboBox(self, width=180)
         self.student_entry.bind("<KeyRelease>", lambda event, x=["cafe", "student_name"]: (self.config.save_to_json(x)))
         self.student_entry.grid(row=1, column=1, padx=20, pady=(20, 0))
-        with open("gui/students.json", "r") as f:
-            student_names = json.load(f)
+
         save_student = lambda name: self.student_entry.set(name)
-        self.student_dropdown = CTkScrollableDropdown(self.student_entry, width=180, height=550, values=student_names, autocomplete=True, command= lambda choice, x=["cafe", "student_name"]: (save_student(choice), self.config.save_to_json(x)))
-        self.tap_checkbox = customtkinter.CTkCheckBox(self, text="Tap Students", font=customtkinter.CTkFont(family="Inter", size=20), command= lambda x=["cafe", "tap_students"]: self.config.save_to_json(x))
-        self.tap_checkbox.grid(row=2, column=0, pady=(20,0), padx=20, sticky="nw")
-        self.claim_checkbox = customtkinter.CTkCheckBox(self, text="Claim Earnings", font=customtkinter.CTkFont(family="Inter", size=20), command= lambda x=["cafe", "claim_earnings"]: self.config.save_to_json(x))
-        self.claim_checkbox.grid(row=3, column=0, pady=(20, 0), padx=20, sticky="nw")
+        server = self.config.config_data["login"]["server"]
+        with open(f"gui/student_list/{server}.json", "r") as f:
+            student_list = json.load(f)
+        self.student_dropdown = CTkScrollableDropdown(self.student_entry, values=student_list, width=180, height=550, autocomplete=True, command=lambda choice, x=["cafe", "student_name"]: (save_student(choice), self.config.save_to_json(x)))
         self.linker.widgets["cafe"]["invite_student"] = self.invite_checkbox
         self.linker.widgets["cafe"]["student_name"] = self.student_entry
+
+    def create_tap_students_widgets(self):
+        self.tap_checkbox = customtkinter.CTkCheckBox(self, text="Tap Students", font=customtkinter.CTkFont(family="Inter", size=20), command=lambda x=["cafe", "tap_students"]: self.config.save_to_json(x))
+        self.tap_checkbox.grid(row=2, column=0, pady=(20,0), padx=20, sticky="nw")
         self.linker.widgets["cafe"]["tap_students"] = self.tap_checkbox
+
+
+    def create_claim_earnings_widgets(self):
+        self.claim_checkbox = customtkinter.CTkCheckBox(self, text="Claim Earnings", font=customtkinter.CTkFont(family="Inter", size=20), command=lambda x=["cafe", "claim_earnings"]: self.config.save_to_json(x))
+        self.claim_checkbox.grid(row=3, column=0, pady=(20, 0), padx=20, sticky="nw")
         self.linker.widgets["cafe"]["claim_earnings"] = self.claim_checkbox
 
 class FarmingFrame(customtkinter.CTkScrollableFrame):
@@ -300,126 +326,235 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         super().__init__(master=master, **kwargs)
         self.linker = linker
         self.config = config
-        self.capitalise = lambda word: " ".join(x.title() for x in word.split("_"))         
+        self.create_widgets()
+        # Load Template Data
+        self.load_template_data()
+        # Load queue Data
+        self.load_queue_data()
+
+
+    def create_widgets(self):
         self.farming_settings_label = customtkinter.CTkLabel(self, text="Farming Settings", font=customtkinter.CTkFont(family="Inter", size=30, weight="bold"))
         self.farming_settings_label.grid(row=0, column=0, sticky="nw", padx=20, pady=20)
+
+        self.create_bounty_widgets()
+        self.create_scrimmage_widgets()
+        self.create_tactical_challenge_widgets()
+        self.create_mission_commissions_widgets()
+
+    def create_bounty_widgets(self):
         self.bounty_checkbox = customtkinter.CTkCheckBox(self, text="Bounty", command=lambda x=["farming", "bounty", "enabled"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
         self.bounty_checkbox.grid(row=1, column=0, sticky="nw", padx=20, pady=20)   
         self.linker.widgets["farming"]["bounty"]["enabled"] = self.bounty_checkbox
-        values = ["0"+ str(x) for x in range(1, 10)]
+        values = ["0" + str(x) for x in range(1, 10)]
+
         for index, element in enumerate(["overpass", "desert_railroad", "classroom"]):
-            label = customtkinter.CTkLabel(self, text=self.capitalise(element), font=customtkinter.CTkFont(family="Inter", size=16))
-            label.grid(row=index+2, column=0, sticky="nw", padx=80)
+            label = customtkinter.CTkLabel(self, text=self.linker.capitalise(element), font=customtkinter.CTkFont(family="Inter", size=16))
+            label.grid(row=index + 2, column=0, sticky="nw", padx=80)
+
             option_menu = customtkinter.CTkOptionMenu(self, width=80, values=values, command=lambda x, y=["farming", "bounty", element, "stage"]: self.config.save_to_json(y), font=customtkinter.CTkFont(family="Inter", size=16))
-            option_menu.grid(row=index+2, column=1)
+            option_menu.grid(row=index + 2, column=1)
             self.linker.widgets["farming"]["bounty"][element]["stage"] = option_menu
-            spinbox = IntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["farming","bounty",element,"run_times"]:self.config.save_to_json(x))
-            spinbox.entry.bind("<KeyRelease>", lambda event, x=["farming","bounty",element,"run_times"]: self.config.save_to_json(x))
-            spinbox.grid(row=index+2, column=2)
+
+            spinbox = IntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["farming", "bounty", element, "run_times"]:self.config.save_to_json(x))
+            spinbox.entry.bind("<KeyRelease>", lambda event, x=["farming", "bounty", element, "run_times"]: self.config.save_to_json(x))
+            spinbox.grid(row=index + 2, column=2)
             self.linker.widgets["farming"]["bounty"][element]["run_times"] = spinbox
+
+    def create_scrimmage_widgets(self):
         self.scrimmage_checkbox = customtkinter.CTkCheckBox(self, text="Scrimmage", command=lambda x=["farming", "scrimmage", "enabled"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
         self.scrimmage_checkbox.grid(row=5, column=0, sticky="nw", padx=20, pady=20)
         self.linker.widgets["farming"]["scrimmage"]["enabled"] = self.scrimmage_checkbox
+
+        values = ["0" + str(x) for x in range(1, 10)]
+
         for index, element in enumerate(["trinity", "gehenna", "millennium"]):
-            label = customtkinter.CTkLabel(self, text=self.capitalise(element), font=customtkinter.CTkFont(family="Inter", size=16))
-            label.grid(row=index+6, column=0, sticky="nw", padx=80)
+            label = customtkinter.CTkLabel(self, text=self.linker.capitalise(element), font=customtkinter.CTkFont(family="Inter", size=16))
+            label.grid(row=index + 6, column=0, sticky="nw", padx=80)
+
             option_menu = customtkinter.CTkOptionMenu(self, width=80, values=values[:5], command=lambda x, y=["farming", "scrimmage", element, "stage"]: self.config.save_to_json(y))
-            option_menu.grid(row=index+6, column=1)
+            option_menu.grid(row=index + 6, column=1)
             self.linker.widgets["farming"]["scrimmage"][element]["stage"] = option_menu
-            spinbox = IntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["farming","scrimmage",element,"run_times"]:self.config.save_to_json(x))
-            spinbox.entry.bind("<KeyRelease>", lambda event, x=["farming","scrimmage",element,"run_times"]: self.config.save_to_json(x))
-            spinbox.grid(row=index+6, column=2)
+
+            spinbox = IntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["farming", "scrimmage", element, "run_times"]: self.config.save_to_json(x))
+            spinbox.entry.bind("<KeyRelease>", lambda event, x=["farming", "scrimmage", element, "run_times"]: self.config.save_to_json(x))
+            spinbox.grid(row=index + 6, column=2)
             self.linker.widgets["farming"]["scrimmage"][element]["run_times"] = spinbox
+
+    def create_tactical_challenge_widgets(self):
         self.tactical_checkbox = customtkinter.CTkCheckBox(self, text="Tactical Challenge", command=lambda x=["farming", "tactical_challenge", "enabled"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
         self.tactical_checkbox.grid(row=9, column=0, sticky="nw", padx=20, pady=20)
         self.linker.widgets["farming"]["tactical_challenge"]["enabled"] = self.tactical_checkbox
+
         self.rank_label = customtkinter.CTkLabel(self, text="Rank", font=customtkinter.CTkFont(family="Inter", size=16))
         self.rank_label.grid(row=10, column=0, sticky="nw", padx=80)
 
-        self.rank_optionmenu = customtkinter.CTkOptionMenu(self, values=["highest", "middle", "lowest"], command=lambda x,y=["farming", "tactical_challenge", "rank"]: self.config.save_to_json(y))
+        self.rank_optionmenu = customtkinter.CTkOptionMenu(self, values=["highest", "middle", "lowest"], command=lambda x, y=["farming", "tactical_challenge", "rank"]: self.config.save_to_json(y))
         self.rank_optionmenu.grid(row=10, column=1)
         self.linker.widgets["farming"]["tactical_challenge"]["rank"] = self.rank_optionmenu
-        # Create labels for Element 1, Element 2, Element 3 at the top
+
+
+    def create_mission_commissions_widgets(self):
+        # Create Mission/Commissions/Event Checkbox
+        self.create_mission_commissions_checkbox()
+
+        # Create Reset Daily Widgets
+        self.create_reset_daily_widgets()
+
+        # Create Recharge AP and Event Checkboxes
+        self.create_recharge_and_event_checkboxes()
+
+        # Create Preferred Template Selection
+        self.create_preferred_template_selection()
+
+        # Create Mission Tabview with Template and Queue Tabs
+        self.create_mission_tabview()
+
+        # Create Top-Level Window for Template Editing
+        self.create_template_queue_editor()
+
+        # Create Template Frame and Queue Frame
+        self.create_template_and_queue_frames()
+
+        # Create Lists to Store Frame Widgets
+        self.create_frame_lists()
+
+        # Initialize Preferred Template and Templates List
+        self.initialize_preferred_template()
+
+        # Create OptionMenu for Selecting a Template
+        self.create_template_option_menu()
+
+        # Create Delete Template Button
+        self.create_delete_template_button()
+
+    # Helper method to create Mission/Commissions/Event Checkbox
+    def create_mission_commissions_checkbox(self):
         self.mission_commissions_checkbox = customtkinter.CTkCheckBox(self, text="Mission/\nCommissions/Event", width=60, font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"), command=lambda x=["farming", "mission", "enabled"]: self.config.save_to_json(x))
         self.mission_commissions_checkbox.grid(row=11, column=0, sticky="nw", padx=20, pady=20)
         self.linker.widgets["farming"]["mission"]["enabled"] = self.mission_commissions_checkbox
+
+    # Helper method to create Reset Daily Widgets
+    def create_reset_daily_widgets(self):
         self.reset_daily = customtkinter.CTkCheckBox(self, text="Reset Daily", font=customtkinter.CTkFont(family="Inter", size=16))
         self.reset_daily.grid(row=12, column=0, sticky="nw", padx=80)
+        self.reset_daily_tooltip = CTkToolTip(self.reset_daily, wraplength=400,
+                                              message="If enabled and if current time >= reset time,\
+                                                the queue will automatically be cleared and repopulated with preferred template stages. Only activated once a day.")
+
         self.reset_daily_sub_label = customtkinter.CTkLabel(self, text="hh/mm/ss", font=customtkinter.CTkFont(family="Inter", size=12))
         self.reset_daily_sub_label.grid(row=13, column=0, padx=80)
+
         self.reset_time = TimeEntry(self)
         self.reset_time.grid(row=12, column=1)
         self.reset_time.hour_entry.bind("<KeyRelease>", lambda event, x=["farming", "mission", "reset_time"]: self.config.save_to_json(x))
         self.reset_time.minute_entry.bind("<KeyRelease>", lambda event, x=["farming", "reset_time"]: self.config.save_to_json(x))
         self.reset_time.second_entry.bind("<KeyRelease>", lambda event, x=["farming", "reset_time"]: self.config.save_to_json(x))
+
         self.linker.widgets["farming"]["mission"]["reset_daily"] = self.reset_daily
         self.linker.widgets["farming"]["mission"]["reset_time"] = self.reset_time
+
+    # Helper method to create Recharge AP and Event Checkboxes
+    def create_recharge_and_event_checkboxes(self):
         self.recharge_checkbox = customtkinter.CTkCheckBox(self, text="Recharge AP", command=lambda x=["farming", "mission", "recharge_ap"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16))
-        self.recharge_checkbox.grid(row=14, column=0, sticky="nw", padx=80, pady=20)    
+        self.recharge_checkbox.grid(row=14, column=0, sticky="nw", padx=80, pady=20)
         self.linker.widgets["farming"]["mission"]["recharge_ap"] = self.recharge_checkbox
-        self.event_checkbox = customtkinter.CTkCheckBox(self, text="Event", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16))
+        self.recharge_tooltip = CTkToolTip(self.recharge_checkbox, wraplength=400,
+                                              message="When enabled, recharge AP when low via cafe earnings and mailbox, regardless of whether they are enabled in their respective sections.")
+        self.event_checkbox = customtkinter.CTkCheckBox(self, text="Run Event Stages", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16))
         self.event_checkbox.grid(row=15, column=0, sticky="nw", padx=80)
         self.linker.widgets["farming"]["mission"]["event"] = self.event_checkbox
+
+    # Helper method to create Preferred Template Selection
+    def create_preferred_template_selection(self):
         self.templates = self.config.config_data["farming"]["mission"]["templates"]
         self.templates_list = list(self.templates.keys())
+
         self.preferred_template_label = customtkinter.CTkLabel(self, text="Preferred Template:", font=customtkinter.CTkFont(family="Inter", size=16))
         self.preferred_template_label.grid(row=16, column=0, pady=20)
-        self.preferred_template_optionmenu = customtkinter.CTkOptionMenu(self, values=self.templates_list, command=lambda x, y=["farming","mission","preferred_template"]: self.config.save_to_json(y))
+        self.preferred_template_tooltip = CTkToolTip(self.preferred_template_label, wraplength=400,
+                                              message="The template from which to repopulate the queue when it is empty or reset daily is activated")
+        self.preferred_template_optionmenu = customtkinter.CTkOptionMenu(self, values=self.templates_list, command=lambda x, y=["farming", "mission", "preferred_template"]: self.config.save_to_json(y))
         self.preferred_template_optionmenu.grid(row=16, column=1, pady=20)
         self.linker.widgets["farming"]["mission"]["preferred_template"] = self.preferred_template_optionmenu
+
+    # Helper method to create Mission Tabview with Template and Queue Tabs
+    def create_mission_tabview(self):
         self.mission_tabview = customtkinter.CTkTabview(self, height=500)
         self.mission_tabview.grid(row=17, column=0, columnspan=3, padx=20)
+
         self.tab_template = self.mission_tabview.add('Template')
         self.tab_queue = self.mission_tabview.add('Queue')
+
+    # Helper method to create Template Queue Editor 
+    def create_template_queue_editor(self):
         self.toplevel_window = None
         self.queue_buttons = []
+
         for i in [self.tab_queue, self.tab_template]:
             queue = True if i == self.tab_queue else False
+
             self.template_labels = customtkinter.CTkFrame(i)
             self.template_labels.grid(row=0, column=0, sticky="ew")
+
             self.mode_label = customtkinter.CTkLabel(self.template_labels, text="Mode:")
-            self.mode_label.grid(row=1, column=0, padx=(130,0), pady=5)
+            self.mode_label.grid(row=1, column=0, padx=(130, 0), pady=5)
+
             self.stage_label = customtkinter.CTkLabel(self.template_labels, text="Stage:")
-            self.stage_label.grid(row=1, column=1, padx=(40,40), pady=5)
+            self.stage_label.grid(row=1, column=1, padx=(40, 40), pady=5)
+
             self.run_times_label = customtkinter.CTkLabel(self.template_labels, text="Run Times:")
             self.run_times_label.grid(row=1, column=2, pady=5)
-            # Add button to add a new frame
+
             self.template_buttons_frame = customtkinter.CTkFrame(i)
             self.template_buttons_frame.grid(row=3, column=0)
+
             self.add_button = customtkinter.CTkButton(self.template_buttons_frame , text="Add", command=lambda queue=queue: self.add_frame(queue=queue))
             self.add_button.grid(row=0, column=0, padx=5, pady=5)
 
-            # Add button to clear all frames
+            # Clear button to clear all frames
             self.clear_button = customtkinter.CTkButton(self.template_buttons_frame, text="Clear All", command=lambda queue=queue: self.clear_frames(queue=queue), fg_color="crimson")
             self.clear_button.grid(row=0, column=1, padx=5, pady=5)
 
-            # Add button to save data
-            self.save_button = customtkinter.CTkButton(self.template_buttons_frame, text="Save", command=lambda queue=queue: self.save_data(queue=queue))
+            # Save button to save data
+            self.save_button = customtkinter.CTkButton(self.template_buttons_frame, text="Save", command=lambda queue=queue: self.save_data(queue=queue), fg_color="#DC621D")
             self.save_button.grid(row=0, column=2, padx=5, pady=5)
             if queue:
                 self.queue_buttons = [self.add_button, self.clear_button, self.save_button]
 
+    # Helper method to create Template Frame and Queue Frame
+    def create_template_and_queue_frames(self):
         self.template_frame = customtkinter.CTkScrollableFrame(self.tab_template, width=400, height=350)
         self.template_frame.grid(row=1, column=0, sticky="nsew")
+        
         self.queue_frame = customtkinter.CTkScrollableFrame(self.tab_queue, width=400, height=350)
         self.queue_frame.grid(row=1, column=0, sticky="nsew")
 
-        # Create a list to store frame widgets
-        self.frames = []
+    # Helper method to create Lists to Store Frame Widgets
+    def create_frame_lists(self):
+        self.template_frames = []
         self.queue_frames = []
 
+    # Helper method to initialize Preferred Template and Templates List
+    def initialize_preferred_template(self):
         self.preferred_template = self.config.config_data["farming"]["mission"]["preferred_template"]
         self.templates_list.append("Add New Template")
-        # OptionMenu for selecting a template
+
+    # Helper method to create OptionMenu for Selecting a Template
+    def create_template_option_menu(self):
         self.selected_template = tk.StringVar(self.template_frame)
         self.selected_template.set(self.preferred_template)  # Set the initial value to the preferred template
-        self.previous_selected = None
+
         self.template_optionmenu = customtkinter.CTkOptionMenu(self.template_labels, values=self.templates_list, variable=self.selected_template, command=lambda *args: self.load_template_data())
         self.template_optionmenu.grid(row=0, column=0, padx=5, pady=5)
+
+    # Helper method to create Delete Template Button
+    def create_delete_template_button(self):
         self.delete_template_button = customtkinter.CTkButton(self.template_labels, width=40, text="D", command=self.delete_template)
         self.delete_template_button.grid(row=0, column=1)
-        self.load_template_data()
 
+    # Helper method to add frames from Configuration Data
+    def load_queue_data(self):
         for entry in self.config.config_data["farming"]['mission']['queue']:
             self.add_frame(entry, queue=True)
 
@@ -471,7 +606,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
 # Function to add a frame with widgets
     def add_frame(self, inner_list=None, queue=False):
-        frames = self.queue_frames if queue else self.frames
+        frames = self.queue_frames if queue else self.template_frames
         parent_frame = self.queue_frame if queue else self.template_frame
         row_index = len(frames) + 1  # Calculate the row for the new frame
         # Create a frame
@@ -503,7 +638,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Function to clear all frames
     def clear_frames(self, queue=False):
-        frames = self.queue_frames if queue else self.frames
+        frames = self.queue_frames if queue else self.template_frames
         for frame in frames:
             frame.destroy()
         frames.clear()
@@ -517,7 +652,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
     # Function to save frames as data
     def save_data(self, queue=False):
         entries = []
-        frames = self.queue_frames if queue else self.frames
+        frames = self.queue_frames if queue else self.template_frames
         for frame in frames:
             mode = frame.winfo_children()[2].get()
             stage = frame.winfo_children()[3].get()
@@ -535,7 +670,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Function to move a frame up
     def move_frame_up(self, frame, queue=False):
-        frames = self.queue_frames if queue else self.frames
+        frames = self.queue_frames if queue else self.template_frames
         index = frames.index(frame)
         if index > 0:
             frames[index], frames[index - 1] = frames[index - 1], frames[index]
@@ -543,15 +678,15 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Function to move a frame down
     def move_frame_down(self, frame, queue=False):
-        frames = self.queue_frames if queue else self.frames
+        frames = self.queue_frames if queue else self.template_frames
         index = frames.index(frame)
         if index < len(frames) - 1:
-            frames[index], self.frames[index + 1] = frames[index + 1], frames[index]
+            frames[index], self.template_frames[index + 1] = frames[index + 1], frames[index]
             self.update_frame_positions(queue=queue)
 
     # Function to update frame positions in the grid
     def update_frame_positions(self, queue=False):
-        frames = self.queue_frames if queue else self.frames
+        frames = self.queue_frames if queue else self.template_frames
         for index, frame in enumerate(frames, start=1):
             frame.grid(row=index + 1, column=0, columnspan=4, padx=10, pady=10, sticky="w")
 
@@ -560,7 +695,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         if queue:
             self.queue_frames.remove(frame)
         else:
-            self.frames.remove(frame)
+            self.template_frames.remove(frame)
         frame.destroy()
         # Update the positions of remaining frames
         self.update_frame_positions(queue=queue)
@@ -630,9 +765,10 @@ class App(customtkinter.CTk):
         self.title("BAAuto")
         self.geometry(f"{1500}x{850}")
         self.iconbitmap('gui/assets/karin.ico')
+        self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
         self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1, minsize=510)
-        self.grid_columnconfigure(2, weight=1, minsize=546)
+        self.grid_columnconfigure(1, weight=1, minsize=550*self.scaleFactor)
+        self.grid_columnconfigure(2, weight=1, minsize=506*self.scaleFactor)
         self.grid_rowconfigure(0, weight=1)
 
 if __name__ == "__main__":
