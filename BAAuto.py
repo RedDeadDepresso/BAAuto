@@ -8,6 +8,7 @@ import sys
 from gui import *
 import random
 import ctypes
+import re
 
 class Config:
     def __init__(self, linker, config_file):
@@ -97,14 +98,16 @@ class Linker:
             # If process is running, terminate it
             self.p.terminate()
             self.p = None
-            self.start_button.configure(text="Start")
+            self.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
             self.switch_queue_state("normal")
 
         else:
             # If process is not running, start it
+            color = self.start_button.cget("fg_color")
+            print(color)
             self.p = Popen(['python', 'script.py'], stdout=PIPE, stderr=STDOUT)
             threading.Thread(target=self.read_output).start()
-            self.start_button.configure(text="Stop")
+            self.start_button.configure(text="Stop", fg_color = "crimson")
             self.switch_queue_state("disabled")
 
     def read_output(self):
@@ -121,7 +124,7 @@ class Linker:
             if self.log_textbox.autoscroll_enabled:
                 self.log_textbox.log_textbox.yview_moveto(1.0)
         # If process ends, change button text to 'Start'
-        self.start_button.configure(text="Start")
+        self.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
         self.switch_queue_state("normal")
         self.p = None
 
@@ -148,11 +151,11 @@ class Sidebar(customtkinter.CTkFrame):
         self.linker = linker
         self.config = config
         super().__init__(master=self.master, **kwargs)
-        karin_logo = customtkinter.CTkImage(light_image=Image.open("gui/assets/karin.png"), size=(132,132))
+        karin_logo = customtkinter.CTkImage(light_image=Image.open("gui/icons/karin.png"), size=(132,132))
         karin_logo_label = customtkinter.CTkLabel(self, image=karin_logo, text="")
         karin_logo_label.grid(row=0, column=0, padx=(50,0), pady=20, sticky="nsew")
-        self.gear_on = customtkinter.CTkImage(Image.open("gui/assets/gear_on.png"), size=(50,38))
-        self.gear_off = customtkinter.CTkImage(Image.open("gui/assets/gear_off.png"), size=(50,38))
+        self.gear_on = customtkinter.CTkImage(Image.open("gui/icons/gear_on.png"), size=(50,38))
+        self.gear_off = customtkinter.CTkImage(Image.open("gui/icons/gear_off.png"), size=(50,38))
         self.create_module_frames()
         self.create_all_button_frame()
         self.create_start_button()
@@ -267,9 +270,9 @@ class LoginFrame(customtkinter.CTkFrame):
         self.linker.widgets["login"]["server"] = self.server_dropdown
 
     def create_restart_attempts_widgets(self):
-        self.restart_attempts_label = customtkinter.CTkLabel(self, text="Restart attempts", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.restart_attempts_label = customtkinter.CTkLabel(self, text="Restart attempts", font=customtkinter.CTkFont(size=20, weight="bold", underline=True))
         self.restart_attempts_label.grid(row=7, column=0, padx=20, pady=(20, 10))
-        self.restart_attempts_tootltip = CTkToolTip(self.restart_attempts_label, message="Sets the number of restart attempts allowed to the script. Restart attempts are triggered when the game crashes or freezes.")
+        self.restart_attempts_tootltip = CTkToolTip(self.restart_attempts_label, message="Sets the number of restart attempts allowed to the script. Restart attempts are triggered when the game crashes or freezes.", wraplength=400)
 
         self.restart_attempts_spinbox = IntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["login", "restart_attempts"]:self.config.save_to_json(x))
         self.restart_attempts_spinbox.entry.bind("<KeyRelease>", lambda event, x=["login", "restart_attempts"]: self.config.save_to_json(x))
@@ -436,7 +439,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Helper method to create Reset Daily Widgets
     def create_reset_daily_widgets(self):
-        self.reset_daily = customtkinter.CTkCheckBox(self, text="Reset Daily", font=customtkinter.CTkFont(family="Inter", size=16))
+        self.reset_daily = customtkinter.CTkCheckBox(self, text="Reset Daily", font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.reset_daily.grid(row=12, column=0, sticky="nw", padx=80)
         self.reset_daily_tooltip = CTkToolTip(self.reset_daily, wraplength=400,
                                               message="If enabled and if current time >= reset time,\
@@ -456,12 +459,13 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Helper method to create Recharge AP and Event Checkboxes
     def create_recharge_and_event_checkboxes(self):
-        self.recharge_checkbox = customtkinter.CTkCheckBox(self, text="Recharge AP", command=lambda x=["farming", "mission", "recharge_ap"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16))
+        self.recharge_checkbox = customtkinter.CTkCheckBox(self, text="Recharge AP", command=lambda x=["farming", "mission", "recharge_ap"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.recharge_checkbox.grid(row=14, column=0, sticky="nw", padx=80, pady=20)
         self.linker.widgets["farming"]["mission"]["recharge_ap"] = self.recharge_checkbox
         self.recharge_tooltip = CTkToolTip(self.recharge_checkbox, wraplength=400,
                                               message="When enabled, recharge AP when low via cafe earnings and mailbox, regardless of whether they are enabled in their respective sections.")
-        self.event_checkbox = customtkinter.CTkCheckBox(self, text="Run Event Stages", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16))
+        self.event_checkbox = customtkinter.CTkCheckBox(self, text="Sweep Event Stages", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
+        self.event_tooltip = CTkToolTip(self.event_checkbox, wraplength=400, message="When enabled, the script will sweep event stages. Otherwise, it will ignore them.")
         self.event_checkbox.grid(row=15, column=0, sticky="nw", padx=80)
         self.linker.widgets["farming"]["mission"]["event"] = self.event_checkbox
 
@@ -470,7 +474,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.templates = self.config.config_data["farming"]["mission"]["templates"]
         self.templates_list = list(self.templates.keys())
 
-        self.preferred_template_label = customtkinter.CTkLabel(self, text="Preferred Template:", font=customtkinter.CTkFont(family="Inter", size=16))
+        self.preferred_template_label = customtkinter.CTkLabel(self, text="Preferred Template:", font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.preferred_template_label.grid(row=16, column=0, pady=20)
         self.preferred_template_tooltip = CTkToolTip(self.preferred_template_label, wraplength=400,
                                               message="The template from which to repopulate the queue when it is empty or reset daily is activated")
@@ -488,7 +492,6 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Helper method to create Template Queue Editor 
     def create_template_queue_editor(self):
-        self.toplevel_window = None
         self.queue_buttons = []
 
         for i in [self.tab_queue, self.tab_template]:
@@ -497,13 +500,16 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             self.template_labels = customtkinter.CTkFrame(i)
             self.template_labels.grid(row=0, column=0, sticky="ew")
 
-            self.mode_label = customtkinter.CTkLabel(self.template_labels, text="Mode:")
+            self.mode_label = customtkinter.CTkLabel(self.template_labels, text="Mode:", font=customtkinter.CTkFont(underline=True))
+            self.mode_tooltip = CTkToolTip(self.mode_label, message="N:Mission Normal\nH:Mission Hard\nE:Event Quest\nBD:Base Defense\nIR:Item Retrieval\n")
             self.mode_label.grid(row=1, column=0, padx=(130, 0), pady=5)
 
-            self.stage_label = customtkinter.CTkLabel(self.template_labels, text="Stage:")
-            self.stage_label.grid(row=1, column=1, padx=(40, 40), pady=5)
+            self.stage_label = customtkinter.CTkLabel(self.template_labels, text="Stage:", font=customtkinter.CTkFont(underline=True))
+            self.stage_tooltip = CTkToolTip(self.stage_label, message="Valid format for Mission: 1-1\nValid format for Commissions/Event: 01")
+            self.stage_label.grid(row=1, column=1, padx=(40, 20), pady=5)
 
-            self.run_times_label = customtkinter.CTkLabel(self.template_labels, text="Run Times:")
+            self.run_times_label = customtkinter.CTkLabel(self.template_labels, text="Number of Sweeps:", font=customtkinter.CTkFont(underline=True))
+            self.run_times_tooltip = CTkToolTip(self.run_times_label, message="How many times do you want to sweep the stage?")
             self.run_times_label.grid(row=1, column=2, pady=5)
 
             self.template_buttons_frame = customtkinter.CTkFrame(i)
@@ -550,7 +556,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
     # Helper method to create Delete Template Button
     def create_delete_template_button(self):
-        self.delete_template_button = customtkinter.CTkButton(self.template_labels, width=40, text="D", command=self.delete_template)
+        self.delete_template_button = customtkinter.CTkButton(self.template_labels, width=40, text="Delete", command=self.delete_template)
         self.delete_template_button.grid(row=0, column=1)
 
     # Helper method to add frames from Configuration Data
@@ -583,9 +589,10 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.previous_selected  = selected
 
     def delete_template(self):
-        dialog = customtkinter.CTkInputDialog(text=f"Are you sure you want to delete Template {self.previous_selected}? Type yes.", title="Template Deletetion Confirmation")
-        answer = dialog.get_input()
-        if answer not in ["",None] and answer.lower().replace(" ", "") == "yes":
+        msg = CTkMessagebox(title="Template Deletetion", message=f"Are you sure you want to delete Template {self.previous_selected}?",
+                        icon="question", option_1="No", option_2="Yes")
+        response = msg.get()
+        if response=="Yes":
             if self.templates != 1:
                 del self.templates[self.previous_selected]
                 self.templates_list = list(self.templates.keys())
@@ -601,7 +608,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
                 self.template_optionmenu.configure(values=self.templates_list)
                 self.template_optionmenu.set(self.preferred_template)
             else:
-                self.open_toplevel()
+                CTkMessagebox(title="Error", message="At least one template must exist!!!", icon="cancel")
         return
 
 # Function to add a frame with widgets
@@ -621,12 +628,15 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         down_button.grid(row=0, column=1, padx=5, pady=5, sticky="w")
         # Dropdown menu for mode
         mode_optionmenu = customtkinter.CTkOptionMenu(frame, width=60, values=["N", "H", "E", "BD", "IR"])
-        mode_optionmenu.set(inner_list[0] if inner_list else "M")
+        mode_optionmenu.set(inner_list[0] if inner_list else "N")
         mode_optionmenu.grid(row=0, column=2, padx=5, pady=5, sticky="w")
         # Entry widget for stage
         stage_var = tk.StringVar(value=inner_list[1] if inner_list else "")
         stage_entry = customtkinter.CTkEntry(frame, width=60, textvariable=stage_var)
         stage_entry.grid(row=0, column=3, padx=5, pady=5, sticky="w")
+        mode_optionmenu.configure(command=lambda x=mode_optionmenu, y=stage_entry : self.check_entry(x,y))
+        stage_entry.bind('<KeyRelease>', command=lambda event, x=mode_optionmenu, y=stage_entry : self.check_entry(x,y))
+        self.check_entry(mode_optionmenu, stage_entry)
         # Entry widget for run times (only accepts numbers)
         run_times_spinbox = IntegerSpinbox(frame, step_size=1, min_value=1)
         run_times_spinbox.set(value=inner_list[2] if inner_list else 1)
@@ -643,23 +653,19 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             frame.destroy()
         frames.clear()
 
-    def open_toplevel(self):
-        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-            self.toplevel_window = ToplevelWindow(self)  # create window if its None or destroyed
-        else:
-            self.toplevel_window.focus()  # if window exists focus it
-
     # Function to save frames as data
     def save_data(self, queue=False):
         entries = []
         frames = self.queue_frames if queue else self.template_frames
         for frame in frames:
+            mode_optionmenu = frame.winfo_children()[2]
+            stage_entry = frame.winfo_children()[3]
+            if not self.check_entry(mode_optionmenu, stage_entry):
+                CTkMessagebox(title="Error", message="Configuration not saved. Some entries are incomplete or have incorect input.", icon="cancel")
+                return
             mode = frame.winfo_children()[2].get()
             stage = frame.winfo_children()[3].get()
             run_times = frame.winfo_children()[4].get()
-            if stage.replace(" ", "") == "":
-                self.open_toplevel()
-                return
             entries.append([mode, stage, int(run_times)])
         if queue:
             self.config.config_data["farming"]['mission']['queue'] = entries
@@ -667,6 +673,20 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             selected = self.selected_template.get()
             self.templates[selected] = entries
         self.config.save_file()
+
+    def check_entry(self, mode_dropdown, stage_entry):
+        mode = mode_dropdown.get()
+        stage = stage_entry.get()
+        if mode in ["N", "H"]:
+            pattern = r'\d+-\d+'
+        else:
+            pattern = r"^\d{2}$"
+        if re.match(pattern, stage):
+            stage_entry.configure(border_color=['#979DA2', '#565B5E'])
+            return True
+        else:
+            stage_entry.configure(border_color='crimson')  
+            return False
 
     # Function to move a frame up
     def move_frame_up(self, frame, queue=False):
@@ -764,10 +784,10 @@ class App(customtkinter.CTk):
     def configure_window(self):
         self.title("BAAuto")
         self.geometry(f"{1500}x{850}")
-        self.iconbitmap('gui/assets/karin.ico')
+        self.iconbitmap('gui/icons/karin.ico')
         self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
         self.grid_columnconfigure(0, weight=0)
-        self.grid_columnconfigure(1, weight=1, minsize=550*self.scaleFactor)
+        self.grid_columnconfigure(1, weight=0, minsize=650*self.scaleFactor)
         self.grid_columnconfigure(2, weight=1, minsize=506*self.scaleFactor)
         self.grid_rowconfigure(0, weight=1)
 
