@@ -60,8 +60,6 @@ class IntegerSpinbox(customtkinter.CTkFrame):
         self.min_value = min_value
         self.command = command
 
-        self.configure(fg_color=("gray78", "gray28"))
-
         self.grid_columnconfigure((0, 2), weight=0)
         self.grid_columnconfigure(1, weight=1)
 
@@ -115,3 +113,8 @@ class IntegerSpinbox(customtkinter.CTkFrame):
     def set(self, value: int):
         self.entry.delete(0, "end")
         self.entry.insert(0, max(self.min_value, value))  # Ensure the value is not less than 0
+
+    def configure(self, state):
+        self.subtract_button.configure(state=state)
+        self.add_button.configure(state=state)
+        self.entry.configure(state=state)

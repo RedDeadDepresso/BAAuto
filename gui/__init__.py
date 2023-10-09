@@ -11,4 +11,5 @@ __version__ = '0.7'
 from .ctk_scrollable_dropdown import CTkScrollableDropdown
 from .ctk_scrollable_dropdown_frame import CTkScrollableDropdownFrame
 from .ctkmessagebox import CTkMessagebox
+from .ctk_tooltip import CTkToolTip
 from .widgets import TimeEntry, ToplevelWindow, IntegerSpinbox

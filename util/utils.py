@@ -983,7 +983,6 @@ class Utils(object):
                 return sweep_status
             if current < num:
                 if current == last_current:
-                    Logger.log_warning(f'Ran out of AP but enough to complete stage {last_current} times instead of {num}')
                     num = current
                     sweep_status = ('incomplete', last_current)
                 else:
