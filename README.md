@@ -1,13 +1,14 @@
 # BAAuto
 A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the Global server with support for English and Chinese language, but it should be easy to implement new servers by changing the templates.
 
-UPDATE: Someone is making one with more features planned than mine https://github.com/MaaAssistantArknights/MBA.
+UPDATE: Someone is making one with more features planned than mine https://github.com/MaaAssistantArknights/MBA. I will try to maintain BAAuto until MBA is at a decent point in development. However, I don't plan to add any new features.
 
 ## Requirements on Windows
 * Python 3.7.X installed and added to PATH.
 * Latest [ADB](https://developer.android.com/studio/releases/platform-tools) added to PATH.
 * ADB debugging enabled emulator with **1280x720 resolution** and **Android 5 or newer**.
-## Graphics Settings
+  
+## Graphics Settings in Blue Archive
 * Minimum: Medium at 30fps
 * Recommended: Medium, High or Very High at 60 fps. 
 * Lower settings may be possible with some changes to the script.
@@ -23,11 +24,10 @@ UPDATE: Someone is making one with more features planned than mine https://githu
 7. Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
 
 ## Relevant information
-* It started as a learning experience and a challenge for myself. However, I have been very busy lately so I am unsure to continue it. 
-Feel free to do whatever you want with it, I do not mind.
-* I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
 * If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
 * The GUI was inspired by [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) and [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript). It is just an interface to modify config.json and display script.py output.
+* I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
+* Feel free to do whatever you want with BAAuto, I do not mind.
 
 ## Changes Made
 * Changed resolution from 1920x1080 to 1280x720. 
@@ -38,4 +38,4 @@ Feel free to do whatever you want with it, I do not mind.
 * Ascreencap does not work. Use uiautomator2 instead.
 * The GUI is a mess, in particularly the Mission/Commissions/Event section.
 * The script depends highly on time.sleep() making it sometimes slow.
-* No implementation of data validation for the config.json. Script will most likely crash if the file is corrupted.
+* No implementation of data validation for the config.json. GUI and Script will most likely crash if the file is corrupted or have incorrect data.
