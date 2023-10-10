@@ -70,21 +70,30 @@ class Config:
         if isinstance(widget, customtkinter.CTkCheckBox):
             value = True if value==1 else False
         data[list_keys[-1]] = value
-        self.save_file()
+        self.save_file("Configuration")
 
-    def save_file(self):
+    def save_file(self, name=None):
         with open("config.json", "w") as config_file:
             json.dump(self.config_data, config_file, indent=2)
+        if name:    
+            self.linker.show_notification(name)
     
 class Linker:
     def __init__(self):
         self.capitalise = lambda word: " ".join(x.title() for x in word.split("_"))        
         self.config = None
         self.widgets = {}
+        # frames
+        self.sidebar = None
         self.modules_dictionary = {}
-        self.start_button = None
-        self.log_textbox = None
-        self.p = None
+        self.logger = None
+        # script.py process
+        self.script = None
+        self.name_to_sidebar_frame = {
+            "Template": None,
+            "Queue": None,
+            "Configuration":None
+        }
 
     def switch_student_list(self):
         server = self.config.config_data["login"]["server"]
@@ -94,39 +103,37 @@ class Linker:
         cafe_frame.student_dropdown.configure(values=student_list)
         
     def start_stop(self):
-        if hasattr(self, 'p') and self.p is not None:
+        if hasattr(self, 'script') and self.script is not None:
             # If process is running, terminate it
-            self.p.terminate()
-            self.p = None
-            self.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
+            self.script.terminate()
+            self.script = None
+            self.sidebar.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
             self.switch_queue_state("normal")
 
         else:
             # If process is not running, start it
-            color = self.start_button.cget("fg_color")
-            print(color)
-            self.p = Popen(['python', 'script.py'], stdout=PIPE, stderr=STDOUT)
+            self.script = Popen(['python', 'script.py'], stdout=PIPE, stderr=STDOUT)
             threading.Thread(target=self.read_output).start()
-            self.start_button.configure(text="Stop", fg_color = "crimson")
+            self.sidebar.start_button.configure(text="Stop", fg_color = "crimson")
             self.switch_queue_state("disabled")
 
     def read_output(self):
-        for line in iter(self.p.stdout.readline, b''):
+        for line in iter(self.script.stdout.readline, b''):
             line = line.decode("utf-8")  # Decode the bytes to a string
             # Check if line contains any log level
-            for level, color in self.log_textbox.log_level_colors.items():
+            for level, color in self.logger.log_level_colors.items():
                 if level in line:
                     # Display output in text box with color
-                    self.log_textbox.log_textbox.configure(state="normal")           
-                    self.log_textbox.log_textbox.insert("end", line, level)
-                    self.log_textbox.log_textbox.configure(state="disabled")
+                    self.logger.log_textbox.configure(state="normal")           
+                    self.logger.log_textbox.insert("end", line, level)
+                    self.logger.log_textbox.configure(state="disabled")
                     break
-            if self.log_textbox.autoscroll_enabled:
-                self.log_textbox.log_textbox.yview_moveto(1.0)
+            if self.logger.autoscroll_enabled:
+                self.logger.log_textbox.yview_moveto(1.0)
         # If process ends, change button text to 'Start'
-        self.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
+        self.sidebar.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
         self.switch_queue_state("normal")
-        self.p = None
+        self.script = None
 
     def switch_queue_state(self, state):
         farming_frame = self.modules_dictionary["farming"]["frame"]
@@ -145,20 +152,33 @@ class Linker:
         for entry in self.config.config_data["farming"]['mission']['queue']:
             farming_frame.add_frame(entry, queue=True)
 
+    def show_notification(self, name):
+        sidebar_frame = self.name_to_sidebar_frame[name]
+        if self.script:
+            new_notification = Notification(text= f"{name} was saved but will be read by the script in the next run.", master=sidebar_frame, fg_color="orange")
+        else:
+            new_notification = Notification(text= f"{name} was saved successfully.", master=sidebar_frame, fg_color="green")
+        new_notification.grid(row=0, column=0, sticky="nsew")
+        self.sidebar.master.after(2500, new_notification.destroy)
+    
 class Sidebar(customtkinter.CTkFrame):
     def __init__(self, master, linker, config, **kwargs):
         self.master = master
         self.linker = linker
         self.config = config
         super().__init__(master=self.master, **kwargs)
-        karin_logo = customtkinter.CTkImage(light_image=Image.open("gui/icons/karin.png"), size=(132,132))
+        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        karin_logo = customtkinter.CTkImage(light_image=Image.open("gui/icons/karin.png"), size=(152,152))
         karin_logo_label = customtkinter.CTkLabel(self, image=karin_logo, text="")
-        karin_logo_label.grid(row=0, column=0, padx=(50,0), pady=20, sticky="nsew")
+        karin_logo_label.grid(row=0, column=0, sticky="nsew")
         self.gear_on = customtkinter.CTkImage(Image.open("gui/icons/gear_on.png"), size=(50,38))
         self.gear_off = customtkinter.CTkImage(Image.open("gui/icons/gear_off.png"), size=(50,38))
         self.create_module_frames()
         self.create_all_button_frame()
         self.create_start_button()
+        self.create_notification_frames()
+        self.linker.sidebar = self
         
     def create_module_frames(self):
 
@@ -196,22 +216,31 @@ class Sidebar(customtkinter.CTkFrame):
         self.clear_all_button.grid(row=4, column=1, padx=10, pady=(15,20), sticky="w")
 
     def create_start_button(self):
-        self.start_button = customtkinter.CTkButton(self, text="Start", width=18-0, height=40, command=self.linker.start_stop, font=customtkinter.CTkFont(family="Inter", size=16))
-        self.start_button.grid(row=2, column=0, padx=(35,0), pady=(25,0),  sticky="nsew")
-        self.linker.start_button = self.start_button
+        self.start_button = customtkinter.CTkButton(self, text="Start", width=200, height=40, command=self.linker.start_stop, font=customtkinter.CTkFont(family="Inter", size=16))
+        self.start_button.grid(row=2, column=0)
+
+    def create_notification_frames(self):
+        for index, element in enumerate(["Template", "Queue", "Configuration"]):
+            frame = customtkinter.CTkFrame(self, fg_color="transparent", height=50)
+            if index == 0:
+                top_pady=170
+            else:
+                top_pady=0
+            frame.grid(row=3+index, column=0, sticky="s", pady=(top_pady,0))
+            self.linker.name_to_sidebar_frame[element] = frame
 
     def select_all(self):
         for module in self.linker.modules_dictionary:
             if module != "momotalk":
                 self.linker.modules_dictionary[module]["checkbox"].select()
                 self.config.config_data[module]["enabled"] = True
-        self.config.save_file()
+        self.config.save_file("Configuration")
 
     def clear_all(self):
         for module in self.linker.modules_dictionary:
             self.linker.modules_dictionary[module]["checkbox"].deselect()
             self.config.config_data[module]["enabled"] = False
-        self.config.save_file()
+        self.config.save_file("Configuration")
 
     def display_settings(self, module):
         for key in self.linker.modules_dictionary:
@@ -657,6 +686,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
     def save_data(self, queue=False):
         entries = []
         frames = self.queue_frames if queue else self.template_frames
+        name = "Queue" if queue else "Template"
         for frame in frames:
             mode_optionmenu = frame.winfo_children()[2]
             stage_entry = frame.winfo_children()[3]
@@ -672,7 +702,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         else:
             selected = self.selected_template.get()
             self.templates[selected] = entries
-        self.config.save_file()
+        self.config.save_file(name)
 
     def check_entry(self, mode_dropdown, stage_entry):
         mode = mode_dropdown.get()
@@ -760,7 +790,7 @@ class LoggerTextBox(customtkinter.CTkFrame):
         }
         for level, color in self.log_level_colors.items():
             self.log_textbox.tag_config(level, foreground=color)
-        self.linker.log_textbox = self
+        self.linker.logger = self
 
     def toggle_autoscroll(self):
         self.autoscroll_enabled = not self.autoscroll_enabled
@@ -785,6 +815,10 @@ class App(customtkinter.CTk):
         self.title("BAAuto")
         self.geometry(f"{1500}x{850}")
         self.iconbitmap('gui/icons/karin.ico')
+        """ 
+        solution to Settings Frame and Logger Frame widths not being 
+        consistent between different windows scaling factoro#s
+        """
         self.scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
         self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=0, minsize=650*self.scaleFactor)

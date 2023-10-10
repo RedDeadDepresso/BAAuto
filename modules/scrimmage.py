@@ -45,7 +45,7 @@ class ScrimmageModule(object):
             return
         self.determine_tickets_region()
         if Utils.scan(self.region["tickets"],resize=True)[0]["text"].strip() == "0/6":
-            Logger.log_warning("Not Enough tickets to run bounty.")
+            Logger.log_warning("Not enough tickets to run bounty.")
             return
         # Loop through the locations queue
         for entry in locations_queue:
@@ -74,7 +74,7 @@ class ScrimmageModule(object):
                             return
                         break
                 else:
-                    Logger.log_msg(f'Error: {entry.capitalize()}-{self.stage[entry]["stage"]} not unlocked')
+                    Logger.log_error(f'{entry.capitalize()}-{self.stage[entry]["stage"]} not unlocked')
             while not Utils.find("goto/scrimmage", color=True):
                 Utils.touch(55,40)
                 Utils.wait_update_screen(1)

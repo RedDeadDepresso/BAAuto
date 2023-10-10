@@ -187,7 +187,7 @@ class MissionModule(object):
                     return outcome
             else:
                 Logger.log_error(f'{self.acronym[mode]} {stage} is not unlocked')
-                return ('failed')
+        return ('failed')
 
     def read_ap(self, location=None):
         # Read and return current AP and max AP
@@ -197,7 +197,15 @@ class MissionModule(object):
             GoTo.event()    
         else:
             GoTo.sub_campaign(location)
-        ap = Utils.scan(self.region['ap'])[0]['text']
+        waiting_time = 0    
+        ap = [""]
+        # solution to AP being hidden by tasks notifications
+        while waiting_time <= 5 and not ap[0].isdigit():
+            Utils.wait_update_screen(1)
+            ap = Utils.scan(self.region['ap'])[0]['text']
+            waiting_time += 1
+        if not ap[0].isdigit():
+            Logger.log_error("Error reading AP")
         return [int(x) for x in [x.strip() for x in ap.split('/')]]
 
     def recharge_ap(self):
