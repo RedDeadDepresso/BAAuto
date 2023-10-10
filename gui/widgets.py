@@ -38,13 +38,17 @@ class TimeEntry(customtkinter.CTkFrame):
         s = self.second.get() if self.second.get() else "00"
         return f"{h.zfill(2)}:{m.zfill(2)}:{s.zfill(2)}"
     
-class ToplevelWindow(tk.Toplevel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.geometry("400x300")
-
-        self.label = tk.Label(self, text="Warning!")
-        self.label.pack(padx=20, pady=20)
+class Notification(customtkinter.CTkFrame):
+    def __init__(self, text, master, **kwargs):
+        super().__init__(master=master, **kwargs)
+        self.label = customtkinter.CTkLabel(self, text=text, width=200, wraplength=200, font=("Inter", 16))
+        self.label.grid(row=0, column=0, sticky="nsew")
+        self.close_button = customtkinter.CTkButton(self, width=40, text="X", command=self.destroy, fg_color="transparent")
+        self.close_button.grid(row=0, column=1)
+        self.progress_bar = customtkinter.CTkProgressBar(self, progress_color="white", determinate_speed=0.4)
+        self.progress_bar.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        self.progress_bar.set(0)
+        self.progress_bar.start()
 
 class IntegerSpinbox(customtkinter.CTkFrame):
     def __init__(self, *args,
