@@ -2,6 +2,8 @@
 ![example](https://github.com/RedDeadDepresso/BAAuto/assets/94017243/8c661360-5667-401a-986d-3fb0f7400462)
 A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the Global server with support for English and Chinese language, but it should be easy to implement new servers by changing the templates.
 
+Tasks supported: Login, Cafe, Bounty, Scrimmage, Tactical Challenge, Mission/Commissions/Event and Claim Rewards
+
 UPDATE: Someone is making one with more features planned than mine https://github.com/MaaAssistantArknights/MBA. I will try to maintain BAAuto until MBA is at a decent point in development. However, I don't plan to add any new features.
 
 ## Requirements on Windows
