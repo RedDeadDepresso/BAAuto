@@ -1,14 +1,21 @@
-import tkinter as tk
-from PIL import Image
 import json
-from subprocess import Popen, PIPE, STDOUT
+import subprocess
 import threading
 import customtkinter
 import sys
+<<<<<<< Updated upstream
 from gui import *
 import random
 import ctypes
 import re
+=======
+import platform
+import customtkinter
+import subprocess
+from gui.frames.sidebar import Sidebar
+from gui.frames.logger import LoggerTextBox
+from gui.custom_widgets.ctk_notification import CTkNotification
+>>>>>>> Stashed changes
 
 class Config:
     def __init__(self, linker, config_file):
@@ -112,7 +119,7 @@ class Linker:
 
         else:
             # If process is not running, start it
-            self.script = Popen(['python', 'script.py'], stdout=PIPE, stderr=STDOUT)
+            self.script = subprocess.Popen(['python', 'script.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             threading.Thread(target=self.read_output).start()
             self.sidebar.start_button.configure(text="Stop", fg_color = "crimson")
             self.switch_queue_state("disabled")
@@ -155,12 +162,13 @@ class Linker:
     def show_notification(self, name):
         sidebar_frame = self.name_to_sidebar_frame[name]
         if self.script:
-            new_notification = Notification(text= f"{name} was saved but will be read by the script in the next run.", master=sidebar_frame, fg_color="orange")
+            new_notification = CTkNotification(text= f"{name} was saved but will be read by the script in the next run.", master=sidebar_frame, fg_color="orange")
         else:
-            new_notification = Notification(text= f"{name} was saved successfully.", master=sidebar_frame, fg_color="green")
+            new_notification = CTkNotification(text= f"{name} was saved successfully.", master=sidebar_frame, fg_color="green")
         new_notification.grid(row=0, column=0, sticky="nsew")
         self.sidebar.master.after(2500, new_notification.destroy)
     
+<<<<<<< Updated upstream
 class Sidebar(customtkinter.CTkFrame):
     def __init__(self, master, linker, config, **kwargs):
         self.master = master
@@ -798,6 +806,8 @@ class LoggerTextBox(customtkinter.CTkFrame):
             self.toggle_autoscroll_button.configure(text="Autoscroll On")
         else:
             self.toggle_autoscroll_button.configure(text="Autoscroll Off")
+=======
+>>>>>>> Stashed changes
 
 class App(customtkinter.CTk):
     def __init__(self):

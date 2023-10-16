@@ -9,7 +9,7 @@
   "farming": {
     "enabled": true,
     "bounty": {
-      "enabled": false,
+      "enabled": true,
       "overpass": {
         "stage": "04",
         "run_times": 7
@@ -24,7 +24,7 @@
       }
     },
     "scrimmage": {
-      "enabled": false,
+      "enabled": true,
       "trinity": {
         "stage": "01",
         "run_times": 3
@@ -39,7 +39,7 @@
       }
     },
     "tactical_challenge": {
-      "enabled": false,
+      "enabled": true,
       "rank": "lowest"
     },
     "mission": {
@@ -93,7 +93,8 @@
             "08",
             30
           ]
-        ]
+        ],
+        "oo": []
       }
     }
   },
