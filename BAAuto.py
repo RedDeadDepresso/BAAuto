@@ -835,6 +835,34 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(2, weight=1, minsize=506*self.scaleFactor)
         self.grid_rowconfigure(0, weight=1)
 
+<<<<<<< Updated upstream
+=======
+    def get_scaling_factor(self):
+        system = platform.system()
+        
+        if system == 'Windows':
+            import ctypes
+            user32 = ctypes.windll.user32
+            return user32.GetDpiForSystem() / 96.0
+        
+        if system == 'Darwin':  # macOS
+            from Quartz import CGDisplayScreenSize, CGDisplayPixelsWide
+            screen_size = CGDisplayScreenSize(0)
+            screen_width = CGDisplayPixelsWide(0)
+            return screen_width / screen_size[0]
+        
+        if system == 'Linux':
+            import subprocess
+            command = ["gsettings", "get", "org.gnome.desktop.interface", "scaling-factor"]
+            try:
+                output = subprocess.check_output(command).decode("utf-8")
+                return float(output.strip())
+            except subprocess.CalledProcessError:
+                return 1.0  # Default to 100% if unable to retrieve scaling factor
+        
+        return 1.0  # Default scaling factor for unknown or unsupported systems
+
+>>>>>>> Stashed changes
 if __name__ == "__main__":
     app = App()
     app.mainloop()
