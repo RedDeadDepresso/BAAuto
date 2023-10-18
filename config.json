@@ -1,6 +1,6 @@
 {
   "login": {
-    "enabled": true,
+    "enabled": false,
     "network": "127.0.0.1:5557",
     "screenshot_mode": "UIAUTOMATOR2",
     "server": "EN",
@@ -9,7 +9,7 @@
   "farming": {
     "enabled": true,
     "bounty": {
-      "enabled": true,
+      "enabled": false,
       "overpass": {
         "stage": "04",
         "run_times": 7
@@ -24,7 +24,7 @@
       }
     },
     "scrimmage": {
-      "enabled": true,
+      "enabled": false,
       "trinity": {
         "stage": "01",
         "run_times": 3
@@ -39,13 +39,13 @@
       }
     },
     "tactical_challenge": {
-      "enabled": true,
+      "enabled": false,
       "rank": "lowest"
     },
     "mission": {
       "enabled": true,
       "reset_daily": true,
-      "last_run": "2023-10-10 15:46:13",
+      "last_run": "2023-10-18 18:42:18",
       "reset_time": "19:00:00",
       "recharge_ap": true,
       "preferred_template": "template1",
@@ -99,14 +99,14 @@
     }
   },
   "cafe": {
-    "enabled": true,
+    "enabled": false,
     "invite_student": true,
-    "student_name": "Hibiki",
+    "student_name": "Karin",
     "tap_students": true,
     "claim_earnings": true
   },
   "claim_rewards": {
-    "enabled": true,
+    "enabled": false,
     "tasks": true,
     "mailbox": true
   }
