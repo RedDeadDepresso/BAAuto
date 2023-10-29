@@ -173,6 +173,8 @@ class App(customtkinter.CTk):
         logger = LoggerTextBox(self, linker, config, fg_color="#262250")
         logger.grid(row=0, column=2, pady=20, sticky="nsew")
         config.load_config()
+        if config.config_data["login"]["autorun"]:
+            self.after(10, linker.start_stop)
 
     def configure_window(self):
         self.title("BAAuto")

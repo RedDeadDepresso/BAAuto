@@ -988,13 +988,13 @@ class Utils(object):
                 else:
                     for i in range(num - current):
                         cls.touch(*plus)
-                        time.sleep(0.5)
+                        time.sleep(0.7)
                     last_current = current
                     continue
             if current > num:
                 for i in range(current - num):
                     cls.touch(*minus)
-                    time.sleep(0.5)
+                    time.sleep(0.7)
                 last_current = current
                 continue
             if current == num:

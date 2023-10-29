@@ -17,6 +17,7 @@ class LoginFrame(customtkinter.CTkFrame):
         self.create_screenshot_widgets()
         self.create_server_widgets()
         self.create_restart_attempts_widgets()
+        self.create_autorun_widgets()
 
     def create_network_widgets(self):
         self.network_label = customtkinter.CTkLabel(self, text="Connection address:", font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
@@ -56,3 +57,10 @@ class LoginFrame(customtkinter.CTkFrame):
         self.restart_attempts_spinbox.grid(row=8, column=0, padx=20, pady=(20, 10))
 
         self.linker.widgets["login"]["restart_attempts"] = self.restart_attempts_spinbox
+
+    def create_autorun_widgets(self):
+        self.autorun_checkbox = customtkinter.CTkCheckBox(self, text="Autorun after launched", font=customtkinter.CTkFont(size=20, weight="bold"), command=lambda x=["login", "autorun"]: self.config.save_to_json(x))
+        self.autorun_checkbox.grid(row=9, column=0, padx=40, pady=(20, 10))
+        self.linker.widgets["login"]["autorun"] = self.autorun_checkbox
+
+
