@@ -230,15 +230,17 @@ class MissionModule(object):
         last_run_datetime = datetime.strptime(self.config.mission["last_run"], "%Y-%m-%d %H:%M:%S")
         reset_time = datetime.strptime(self.config.mission["reset_time"], "%H:%M:%S").time()
 
-        if current_date >= last_run_datetime.date() and current_time >= reset_time:
+        if current_date != last_run_datetime.date() and current_time >= reset_time:
+            self.update_config(last_run=True)
             return True
         return False
 
-    def update_config(self):
+    def update_config(self, last_run=False):
         # Update the configuration file with the current queue and last run time
         with open('config.json', 'r') as json_file:
             config_data = json.load(json_file)
         config_data["farming"]['mission']['queue'] = self.config.mission['queue']
-        config_data["farming"]['mission']["last_run"] = str(datetime.now().replace(microsecond=0))
+        if last_run:
+            config_data["farming"]['mission']["last_run"] = str(datetime.now().replace(microsecond=0))
         with open("config.json", "w") as json_file:
             json.dump(config_data, json_file, indent=2)

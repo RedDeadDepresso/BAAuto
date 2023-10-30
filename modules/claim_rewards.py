@@ -12,6 +12,8 @@ class ClaimRewardsModule(object):
         self.config = config
 
     def claim_rewards_logic_wrapper(self):
+        if self.config.claim_rewards['club']:
+            GoTo.sub_home('club')
         # Check if there are tasks to claim rewards from
         if self.config.claim_rewards['tasks']:
             # Navigate to the tasks section
@@ -37,7 +39,6 @@ class ClaimRewardsModule(object):
         # Check if there are rewards to claim from the mailbox
         if self.config.claim_rewards['mailbox']:
             # Navigate to the club and then the mailbox
-            GoTo.sub_home('club')
             GoTo.sub_home('mailbox')
             
             while True:

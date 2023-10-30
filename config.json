@@ -1,16 +1,19 @@
 {
   "login": {
-    "enabled": false,
+    "enabled": true,
     "network": "127.0.0.1:5557",
     "screenshot_mode": "UIAUTOMATOR2",
     "server": "EN",
     "restart_attempts": 1,
-    "autorun": true
+    "autorun": false,
+    "launch_emulator": true,
+    "emulator_path": "",
+    "delay": 19
   },
   "farming": {
     "enabled": true,
     "bounty": {
-      "enabled": false,
+      "enabled": true,
       "overpass": {
         "stage": "04",
         "run_times": 7
@@ -25,7 +28,7 @@
       }
     },
     "scrimmage": {
-      "enabled": false,
+      "enabled": true,
       "trinity": {
         "stage": "01",
         "run_times": 3
@@ -40,7 +43,7 @@
       }
     },
     "tactical_challenge": {
-      "enabled": false,
+      "enabled": true,
       "rank": "lowest"
     },
     "mission": {
@@ -90,24 +93,25 @@
             3
           ],
           [
-            "E",
-            "08",
-            30
+            "N",
+            "7-3",
+            35
           ]
         ]
       }
     }
   },
   "cafe": {
-    "enabled": false,
+    "enabled": true,
     "invite_student": true,
     "student_name": "Karin",
     "tap_students": true,
-    "claim_earnings": true
+    "claim_earnings": false
   },
   "claim_rewards": {
-    "enabled": false,
-    "tasks": true,
-    "mailbox": true
+    "enabled": true,
+    "club": false,
+    "tasks": false,
+    "mailbox": false
   }
 }
