@@ -13,6 +13,6 @@ class ClaimRewardsFrame(customtkinter.CTkFrame):
         self.claim_tasks_checkbox.grid(row=2, column=0, pady=(20, 0), padx=20, sticky="nw")
         self.claim_mail_checkbox = customtkinter.CTkCheckBox(self, text="Mailbox", font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"), command= lambda x=["claim_rewards", "mailbox"]: self.config.save_to_json(x))
         self.claim_mail_checkbox.grid(row=3, column=0, pady=(20, 0), padx=20, sticky="nw")
-        self.linker.widgets["claim_rewards"]["club"] = self.claim_tasks_checkbox
+        self.linker.widgets["claim_rewards"]["club"] = self.claim_club_checkbox
         self.linker.widgets["claim_rewards"]["tasks"] = self.claim_tasks_checkbox
         self.linker.widgets["claim_rewards"]["mailbox"] = self.claim_mail_checkbox 

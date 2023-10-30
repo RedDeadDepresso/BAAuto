@@ -173,7 +173,7 @@ class App(customtkinter.CTk):
         logger = LoggerTextBox(self, linker, config, fg_color="#262250")
         logger.grid(row=0, column=2, pady=20, sticky="nsew")
         config.load_config()
-        if config.config_data["login"]["autorun"]:
+        if config.config_data["login"]["auto_start"]:
             self.after(10, linker.start_stop)
 
     def configure_window(self):
@@ -205,7 +205,6 @@ class App(customtkinter.CTk):
             return screen_width / screen_size[0]
         
         if system == 'Linux':
-            import subprocess
             command = ["gsettings", "get", "org.gnome.desktop.interface", "scaling-factor"]
             try:
                 output = subprocess.check_output(command).decode("utf-8")

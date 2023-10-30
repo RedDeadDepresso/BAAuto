@@ -67,30 +67,35 @@ class LoginFrame(customtkinter.CTkFrame):
         self.core_label = customtkinter.CTkLabel(self, text="Startup", font=customtkinter.CTkFont(family="Inter", size=26, weight="bold"))
         self.core_label.grid(row=6, column=0, sticky="nw", padx=20, pady=20)
 
-        self.autorun_checkbox = customtkinter.CTkCheckBox(self, text="Auto Run Script", font=customtkinter.CTkFont(size=20, weight="bold"), command=lambda x=["login", "autorun"]: self.config.save_to_json(x))
-        self.autorun_checkbox.grid(row=7, column=0, padx=40, pady=(20, 10))
-        self.linker.widgets["login"]["autorun"] = self.autorun_checkbox
+        self.autostart_checkbox = customtkinter.CTkCheckBox(self, text="Auto Start Script", font=customtkinter.CTkFont(size=20, weight="bold"), command=lambda x=["login", "auto_start"]: self.config.save_to_json(x))
+        self.autostart_checkbox.grid(row=7, column=0, padx=40, pady=(20, 10), sticky="nw")
+        self.linker.widgets["login"]["auto_start"] = self.autostart_checkbox
 
     def create_emulator_widgets(self):
-        self.emulator_checkbox = customtkinter.CTkCheckBox(self, text="Launch Emulator", font=customtkinter.CTkFont(size=20, weight="bold"), command=lambda x=["login", "launch_emulator"]: self.config.save_to_json(x))
-        self.emulator_checkbox.grid(row=8, column=0, padx=40, pady=(20, 10))
+        self.emulator_checkbox = customtkinter.CTkCheckBox(self, text="Launch Emulator", font=customtkinter.CTkFont(size=20), command=lambda x=["login", "launch_emulator"]: self.config.save_to_json(x))
+        self.emulator_checkbox.grid(row=8, column=0, padx=40, pady=(20, 10), sticky="nw")
+        self.linker.widgets["login"]["launch_emulator"] = self.emulator_checkbox
 
-        self.emulator_path_entry = customtkinter.CTkEntry(self)
-        self.emulator_path_entry.grid(row=10, column=0, columnspan=2, padx=20, pady=(20, 10), sticky="nsew")
+        self.emulator_path_entry = customtkinter.CTkEntry(self, font=customtkinter.CTkFont(family="Inter", size=16))
+        self.emulator_path_entry.grid(row=9, column=0, columnspan=2, padx=(60,0), pady=(20, 10), sticky="nsew")
+        self.emulator_path_entry.bind("<KeyRelease>", lambda event, x=["login", "emulator_path"]: (self.config.save_to_json(x)))
+        self.linker.widgets["login"]["emulator_path"] = self.emulator_path_entry
 
         self.emulator_path_button = customtkinter.CTkButton(self, width=50, text="Select", command = self.open_file)
-        self.emulator_path_button.grid(row=10, column=2)
+        self.emulator_path_button.grid(row=9, column=2, padx=20, pady=(20, 10), sticky="nsew")
 
-        self.delay_label = customtkinter.CTkLabel(self, text="Delay time (s)", font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.delay_label.grid(row=11, column=0, padx=20, pady=(20, 10))
+        self.delay_label = customtkinter.CTkLabel(self, text="Delay time (s)", font=customtkinter.CTkFont(size=20))
+        self.delay_label.grid(row=10, column=0, padx=20, pady=(20, 10))
 
         self.delay_spinbox = CTkIntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["login", "delay"]:self.config.save_to_json(x))
         self.delay_spinbox.entry.bind("<KeyRelease>", lambda event, x=["login", "delay"]: self.config.save_to_json(x))
         self.linker.widgets["login"]["delay"] = self.delay_spinbox
-        self.delay_spinbox.grid(row=11, column=1)
+        self.delay_spinbox.grid(row=10, column=1)
 
 
     def open_file(self):
         filepath = filedialog.askopenfilename(filetypes=[("Executable files", "*.exe;*.lnk")])
-        self.emulator_path_entry.delete(0, END)
-        self.emulator_path_entry.insert(0, filepath)
+        if filepath != "":
+            self.emulator_path_entry.delete(0, END)
+            self.emulator_path_entry.insert(0, filepath)
+            self.config.save_to_json(["login", "emulator_path"])

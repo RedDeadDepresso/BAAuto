@@ -5,10 +5,10 @@
     "screenshot_mode": "UIAUTOMATOR2",
     "server": "EN",
     "restart_attempts": 1,
-    "autorun": false,
+    "auto_start": true,
     "launch_emulator": true,
     "emulator_path": "",
-    "delay": 19
+    "delay": 60
   },
   "farming": {
     "enabled": true,
@@ -106,12 +106,12 @@
     "invite_student": true,
     "student_name": "Karin",
     "tap_students": true,
-    "claim_earnings": false
+    "claim_earnings": true
   },
   "claim_rewards": {
     "enabled": true,
-    "club": false,
-    "tasks": false,
-    "mailbox": false
+    "club": true,
+    "tasks": true,
+    "mailbox": true
   }
 }

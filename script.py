@@ -2,6 +2,10 @@ import sys
 import re
 import traceback
 import argparse
+import os
+import subprocess
+import time
+
 try:
     from modules.login import LoginModule
     from modules.cafe import CafeModule
@@ -98,7 +102,20 @@ try:
             if self.modules['claim_rewards']:
                 return self.modules['claim_rewards'].claim_rewards_logic_wrapper
             return None
-        
+
+        def is_emulator_running(self, process_name):
+            call = ['TASKLIST', '/FI', f'imagename eq {process_name}']
+            output = subprocess.check_output(call, shell=True).decode()
+            
+            # Split the output into lines and check if process_name appears in any of them
+            lines = output.split('\n')
+            for line in lines:
+                if process_name in line:
+                    return True
+            
+            # If process_name is not found in any line, return False
+            return False
+            
     # check run-time args
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config',
@@ -127,6 +144,16 @@ try:
         pass
 
     script = BAAuto(config)
+
+    if config.login["launch_emulator"]:
+        emulator_path = config.login["emulator_path"]
+        if os.path.isfile(emulator_path):
+            if not script.is_emulator_running(emulator_path):
+                process = subprocess.Popen(emulator_path, shell=True)
+                Logger.log_info(f"Waiting {config.login['delay']} seconds after launching emulator...")
+                time.sleep(config.login["delay"])
+        else:
+            Logger.log_warning("Launch emulator was enabled but path is invalid.")
 
     Adb.service = config.network
     Adb.tcp = False if (Adb.service.find(':') == -1) else True

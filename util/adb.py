@@ -35,12 +35,14 @@ class Adb(object):
         """ hooking onto here, previous implementation of get-state
          is pointless since the script kills the ADB server in advance,
          now seperately connect via usb or tcp, tcp variable is set by main script"""
-        if self.tcp:
+        if self.tcp and self.connect_tcp():
             Adb.u2device = u2.connect_adb_wifi(Adb.service)
-            return self.connect_tcp()
+            return True
         else:
-            Adb.u2device = u2.connect_usb(Adb.service)
-            return self.connect_usb()
+            if self.connect_usb():
+                Adb.u2device = u2.connect_usb(Adb.service)
+                return True
+        return False
 
     def connect_tcp(self):
         cmd = ['adb', 'connect', self.service]
@@ -63,9 +65,6 @@ class Adb(object):
             Logger.log_msg('Device [' + self.service + '] authorized and connected.')
             return True
         Logger.log_error('Failure to assign transport_id. Is your device connected? Or is "transport_id" not supported in current ADB version? ')
-        Logger.log_error('Try updating ADB if "transport_id:" does not exist in the info of your device when running "adb devices -l" in cmd.')
-        Logger.log_error('Current ADB version:')
-        self.print_adb_version()
         return False
 
 
@@ -120,8 +119,6 @@ class Adb(object):
         cmd = ['adb', 'devices', '-l']
         response = subprocess.check_output(cmd, stderr=subprocess.STDOUT).decode('utf-8').splitlines()
         cls.sanitize_device_info(response)
-        if not response:
-            Logger.log_error('adb devices -l yielded no lines with "transport_id:"')
         cls.transID = cls.get_serial_trans(cls.service, response)
 
     @staticmethod
