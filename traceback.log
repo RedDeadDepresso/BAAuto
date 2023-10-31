@@ -1,0 +1,11 @@
+Script Initialisation Error
+Traceback (most recent call last):
+  File "C:\Users\mizan\Documents\GitHub\BAAuto\script.py", line 122, in <module>
+    config = Config('config.json')
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mizan\Documents\GitHub\BAAuto\util\config.py", line 35, in __init__
+    self.read()
+  File "C:\Users\mizan\Documents\GitHub\BAAuto\util\config.py", line 81, in read
+    sys.exit(1)
+SystemExit: 1
+

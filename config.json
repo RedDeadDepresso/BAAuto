@@ -4,12 +4,16 @@
     "network": "127.0.0.1:5557",
     "screenshot_mode": "UIAUTOMATOR2",
     "server": "EN",
-    "restart_attempts": 1
+    "restart_attempts": 1,
+    "auto_start": false,
+    "launch_emulator": false,
+    "emulator_path": "",
+    "delay": 60
   },
   "farming": {
-    "enabled": true,
+    "enabled": false,
     "bounty": {
-      "enabled": false,
+      "enabled": true,
       "overpass": {
         "stage": "04",
         "run_times": 7
@@ -24,7 +28,7 @@
       }
     },
     "scrimmage": {
-      "enabled": false,
+      "enabled": true,
       "trinity": {
         "stage": "01",
         "run_times": 3
@@ -39,13 +43,13 @@
       }
     },
     "tactical_challenge": {
-      "enabled": false,
+      "enabled": true,
       "rank": "lowest"
     },
     "mission": {
       "enabled": true,
       "reset_daily": true,
-      "last_run": "2023-10-18 18:42:18",
+      "last_run": "2023-10-29 01:38:25",
       "reset_time": "19:00:00",
       "recharge_ap": true,
       "preferred_template": "template1",
@@ -89,12 +93,11 @@
             3
           ],
           [
-            "E",
-            "08",
-            30
+            "N",
+            "7-3",
+            35
           ]
-        ],
-        "oo": []
+        ]
       }
     }
   },
@@ -107,7 +110,9 @@
   },
   "claim_rewards": {
     "enabled": false,
+    "club": true,
     "tasks": true,
     "mailbox": true
-  }
+  },
+  "then": "Exit Emulator"
 }

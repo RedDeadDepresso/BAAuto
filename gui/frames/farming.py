@@ -6,6 +6,7 @@ from gui.custom_widgets.ctkmessagebox import CTkMessagebox
 from gui.custom_widgets.ctk_tooltip import CTkToolTip
 from gui.custom_widgets.ctk_timeentry import CTkTimeEntry
 from gui.custom_widgets.ctk_integerspinbox import CTkIntegerSpinbox
+from gui.custom_widgets.ctk_templatedialog import CTkTemplateDialog
 
 class FarmingFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master, linker, config, **kwargs):
@@ -146,7 +147,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.recharge_checkbox.grid(row=14, column=0, sticky="nw", padx=80, pady=20)
         self.linker.widgets["farming"]["mission"]["recharge_ap"] = self.recharge_checkbox
         self.recharge_tooltip = CTkToolTip(self.recharge_checkbox, wraplength=400,
-                                              message="When enabled, recharge AP when low via cafe earnings and mailbox, regardless of whether they are enabled in their respective sections.")
+                                              message="When enabled, recharge AP when low via cafe earnings and claim rewards, if they are enabled in their respective sections.")
         self.event_checkbox = customtkinter.CTkCheckBox(self, text="Sweep Event Stages", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.event_tooltip = CTkToolTip(self.event_checkbox, wraplength=400, message="When enabled, the script will sweep event stages. Otherwise, it will ignore them.")
         self.event_checkbox.grid(row=15, column=0, sticky="nw", padx=80)
@@ -251,17 +252,20 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
     def load_template_data(self):
         selected = self.selected_template.get()
         if selected == "Add New Template":
-            dialog = customtkinter.CTkInputDialog(text="Type in new template name:", title="Template Name")
-            template_name = dialog.get_input()
-            if template_name in ["",None]:
+            dialog = CTkTemplateDialog(text="Type in new template name. Template name MUST be different from other templates!", title="Template Name", values=self.templates_list[:-1])
+            template_name, template_import = dialog.get_input()
+            if template_name.replace(" ", "") == "":
                 self.template_optionmenu.set(self.previous_selected)
                 return
-            elif template_name == "Add New Template":
-                CTkMessagebox(title="Error", message="You can't name a template 'Add New Template'", icon="cancel")
+            elif template_name in self.templates_list:
+                CTkMessagebox(title="Error", message="Name is invalid.", icon="cancel")
                 self.template_optionmenu.set(self.previous_selected)
                 return
             else:
-                self.templates[template_name] = []
+                if template_import != "":
+                    self.templates[template_name] = self.templates[template_import]
+                else:
+                    self.templates[template_name] = []
                 self.templates_list[-1] = template_name
                 self.preferred_template_optionmenu.configure(values=self.templates_list)
                 selected = template_name
