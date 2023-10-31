@@ -44,3 +44,11 @@ UPDATE: Someone is making one with more features planned than mine https://githu
 * The GUI is a mess, in particularly the Mission/Commissions/Event section.
 * The script depends highly on time.sleep() making it sometimes slow.
 * No implementation of data validation for the config.json. GUI and Script will most likely crash if the file is corrupted or have incorrect data.
+
+## Acknowledgement
+The project was not possible thanks to these people, with no specific order of importance:
+  - [Akascape](https://github.com/Akascape), who provided complex yet easy to use customtkinter widgets.
+  - [Egoistically](https://github.com/Egoistically), for making ALAuto open-source and providing the foundations to build BAAuto.
+  - [hgjhgj](https://github.com/hgjazhgj), not only for supplying the BAAuto OCR library but also for being first to star the repo, which greatly motivated me.
+  - [LmeSzinc](https://github.com/LmeSzinc) and [MistEO](https://github.com/MistEO), the creators of Alas and MAA, respectively, who served as an inspiration for me to develop my own bot.
+  - [TomSchimansky](https://github.com/TomSchimansky), whose created customtkinter allowing an inexperienced programmer like me to create a modern GUI.
