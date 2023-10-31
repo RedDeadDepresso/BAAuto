@@ -24,8 +24,9 @@ UPDATE: Someone is making one with more features planned than mine https://githu
 4. Run `BAAuto.py` and change connection address to your emulator's adb port, then change the rest to your likings. 
 5. Changes are automatically saved except for Mission/Commissions/Event in the Farming section
 6. For Event you have to upload a crop of the event banner from homescreen or campaign screen without any background in assets/EN/goto and save it as event_banner.png.
-7. If you enabled Tap Students in Cafe, zoom out and swipe to bottom-left so that the bottom-left corner is visible before starting the script. Please make a pull request if you know how to zoom out using Adb.
-8. Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
+7. DO NOT set the number of sweeps higher than 30. This will make BAAuto think that the game is stuck.
+8. If you enabled Tap Students in Cafe, zoom out and swipe to bottom-left so that the bottom-left corner is visible before starting the script. Please make a pull request if you know how to zoom out using Adb.
+9. Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
 
 ## Relevant information
 * If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
