@@ -6,9 +6,13 @@ import sys
 import platform
 import customtkinter
 import subprocess
+import os
+
+from util.emulator import Emulator
 from gui.frames.sidebar import Sidebar
 from gui.frames.logger import LoggerTextBox
 from gui.custom_widgets.ctk_notification import CTkNotification
+from gui.custom_widgets.ctkmessagebox import CTkMessagebox
 
 class Config:
     def __init__(self, linker, config_file):
@@ -94,6 +98,7 @@ class Linker:
             "Queue": None,
             "Configuration":None
         }
+        self.should_then = False
 
     def switch_student_list(self):
         server = self.config.config_data["login"]["server"]
@@ -118,6 +123,7 @@ class Linker:
             self.switch_queue_state("disabled")
 
     def read_output(self):
+        line = ""
         for line in iter(self.script.stdout.readline, b''):
             line = line.decode("utf-8")  # Decode the bytes to a string
             # Check if line contains any log level
@@ -134,6 +140,8 @@ class Linker:
         self.sidebar.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
         self.switch_queue_state("normal")
         self.script = None
+        if "All assigned tasks were executed." in line:
+            self.sidebar.master.after(1200, self.execute_then)
 
     def switch_queue_state(self, state):
         farming_frame = self.modules_dictionary["farming"]["frame"]
@@ -161,6 +169,30 @@ class Linker:
         new_notification.grid(row=0, column=0, sticky="nsew")
         self.sidebar.master.after(2500, new_notification.destroy)
     
+    def execute_then(self):
+        print("I was called")
+        then = self.config.config_data["then"]
+        emulator_path = self.config.config_data["login"]["emulator_path"]
+
+        if then == "Exit BAAuto":
+            self.sidebar.master.destroy()
+
+        elif then == "Exit Emulator":
+            if os.path.isfile(emulator_path):
+                Emulator.terminate(emulator_path)  
+
+        elif then == "Exit BAAuto and Emulator":
+            if os.path.isfile(emulator_path):
+                Emulator.terminate(emulator_path)  
+            self.sidebar.master.destroy()
+                
+        elif then == "Shutdown":
+            subprocess.run("shutdown -s -t 60", shell=True)
+            msg = CTkMessagebox(title="Cancel Shutdown?", message="All tasks have been completed: shutting down. Do you want to cancel?",
+                                icon="question", option_1="Cancel")
+            response = msg.get()
+            if response=="Cancel":
+                subprocess.run("shutdown -a", shell=True)
 
 class App(customtkinter.CTk):
     def __init__(self):

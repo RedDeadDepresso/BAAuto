@@ -147,7 +147,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.recharge_checkbox.grid(row=14, column=0, sticky="nw", padx=80, pady=20)
         self.linker.widgets["farming"]["mission"]["recharge_ap"] = self.recharge_checkbox
         self.recharge_tooltip = CTkToolTip(self.recharge_checkbox, wraplength=400,
-                                              message="When enabled, recharge AP when low via cafe earnings and mailbox, regardless of whether they are enabled in their respective sections.")
+                                              message="When enabled, recharge AP when low via cafe earnings and claim rewards, if they are enabled in their respective sections.")
         self.event_checkbox = customtkinter.CTkCheckBox(self, text="Sweep Event Stages", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.event_tooltip = CTkToolTip(self.event_checkbox, wraplength=400, message="When enabled, the script will sweep event stages. Otherwise, it will ignore them.")
         self.event_checkbox.grid(row=15, column=0, sticky="nw", padx=80)

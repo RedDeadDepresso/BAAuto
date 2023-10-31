@@ -8,3 +8,5 @@ customtkinter
 uiautomator2
 pponnxcr
 Pillow
+psutil
+pywin32

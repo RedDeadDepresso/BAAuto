@@ -51,9 +51,6 @@ class Adb(object):
             self.assign_serial()
             if (self.transID is not None) and self.transID:
                 return True
-            Logger.log_error('Failure to assign transport_id.')  
-            Logger.log_error('Please try updating your ADB installation. Current ADB version:')
-            self.print_adb_version()
         return False
 
     def connect_usb(self):
@@ -64,7 +61,6 @@ class Adb(object):
             subprocess.call(cmd)
             Logger.log_msg('Device [' + self.service + '] authorized and connected.')
             return True
-        Logger.log_error('Failure to assign transport_id. Is your device connected? Or is "transport_id" not supported in current ADB version? ')
         return False
 
 

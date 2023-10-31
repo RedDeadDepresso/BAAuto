@@ -211,16 +211,18 @@ class MissionModule(object):
     def recharge_ap(self):
         # Recharge AP if configured to do so
         if self.config.mission['recharge_ap']:
-            GoTo.sub_home('cafe')
-            while True:
-                Utils.wait_update_screen(1)
-                if not Utils.find("cafe/earnings"):
-                    Utils.touch(1158, 647)
-                else:
-                    Utils.touch(640, 520)
-                    break
-            from modules.claim_rewards import ClaimRewardsModule
-            ClaimRewardsModule(self.config).claim_rewards_logic_wrapper()
+            if self.config.cafe['enabled'] and self.config.cafe['claim_earnings']:
+                GoTo.sub_home('cafe')
+                while True:
+                    Utils.wait_update_screen(1)
+                    if not Utils.find("cafe/earnings"):
+                        Utils.touch(1158, 647)
+                    else:
+                        Utils.touch(640, 520)
+                        break
+            if self.config.claim_rewards['enabled']:
+                from modules.claim_rewards import ClaimRewardsModule
+                ClaimRewardsModule(self.config).claim_rewards_logic_wrapper()
 
     def check_reset_time(self):
         # Check if it's time to reset the queue

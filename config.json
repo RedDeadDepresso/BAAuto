@@ -1,17 +1,17 @@
 {
   "login": {
-    "enabled": true,
+    "enabled": false,
     "network": "127.0.0.1:5557",
     "screenshot_mode": "UIAUTOMATOR2",
     "server": "EN",
     "restart_attempts": 1,
-    "auto_start": true,
-    "launch_emulator": true,
+    "auto_start": false,
+    "launch_emulator": false,
     "emulator_path": "",
     "delay": 60
   },
   "farming": {
-    "enabled": true,
+    "enabled": false,
     "bounty": {
       "enabled": true,
       "overpass": {
@@ -102,16 +102,17 @@
     }
   },
   "cafe": {
-    "enabled": true,
+    "enabled": false,
     "invite_student": true,
     "student_name": "Karin",
     "tap_students": true,
     "claim_earnings": true
   },
   "claim_rewards": {
-    "enabled": true,
+    "enabled": false,
     "club": true,
     "tasks": true,
     "mailbox": true
-  }
+  },
+  "then": "Exit Emulator"
 }

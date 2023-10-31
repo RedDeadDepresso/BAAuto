@@ -102,19 +102,6 @@ try:
             if self.modules['claim_rewards']:
                 return self.modules['claim_rewards'].claim_rewards_logic_wrapper
             return None
-
-        def is_emulator_running(self, process_name):
-            call = ['TASKLIST', '/FI', f'imagename eq {process_name}']
-            output = subprocess.check_output(call, shell=True).decode()
-            
-            # Split the output into lines and check if process_name appears in any of them
-            lines = output.split('\n')
-            for line in lines:
-                if process_name in line:
-                    return True
-            
-            # If process_name is not found in any line, return False
-            return False
             
     # check run-time args
     parser = argparse.ArgumentParser()
@@ -145,40 +132,45 @@ try:
 
     script = BAAuto(config)
 
-    if config.login["launch_emulator"]:
-        emulator_path = config.login["emulator_path"]
-        if os.path.isfile(emulator_path):
-            if not script.is_emulator_running(emulator_path):
-                process = subprocess.Popen(emulator_path, shell=True)
-                Logger.log_info(f"Waiting {config.login['delay']} seconds after launching emulator...")
-                time.sleep(config.login["delay"])
-        else:
-            Logger.log_warning("Launch emulator was enabled but path is invalid.")
-
     Adb.service = config.network
     Adb.tcp = False if (Adb.service.find(':') == -1) else True
     adb = Adb()
 
-    if adb.init():
-        Logger.log_msg('Successfully connected to the service with transport_id({}).'.format(Adb.transID))
-        output = Adb.exec_out('wm size').decode('utf-8').strip()
+    def start_adb():
+        if adb.init():
+            Logger.log_msg('Successfully connected to the service with transport_id({}).'.format(Adb.transID))
+            output = Adb.exec_out('wm size').decode('utf-8').strip()
 
-        if not re.search('1280x720|1280x720', output):
-            Logger.log_error("Resolution is not 1280x720, please change it.")
+            if not re.search('1280x720|1280x720', output):
+                Logger.log_error("Resolution is not 1280x720, please change it.")
+                sys.exit()
+
+            if 'com.nexon.bluearchive' not in Adb.u2device.app_list():
+                Logger.log_error("Blue Archive is not installed. Unable to run script.")
+                sys.exit()     
+
+            Utils.assets = config.assets
+            # screencap init
+            Utils.init_screencap_mode(config.screenshot_mode)
+            Utils.init_ocr_mode()
+            Utils.record['restart_attempts'] = config.restart_attempts
+        else:
+            if config.login["launch_emulator"]:
+                emulator_path = config.login["emulator_path"]
+                if os.path.isfile(emulator_path):
+                    process = subprocess.Popen(emulator_path, shell=True)
+                    Logger.log_info(f"Waiting {config.login['delay']} seconds after launching emulator...")
+                    time.sleep(config.login["delay"])
+                    config.login["launch_emulator"] = False
+                    start_adb()
+                    return
+                else:
+                    Logger.log_warning("Launch emulator was enabled but path is invalid.")
+
+            Logger.log_error('Unable to connect to the service. Is your device connected?')
             sys.exit()
 
-        if 'com.nexon.bluearchive' not in Adb.u2device.app_list():
-            Logger.log_error("Blue Archive is not installed. Unable to run script.")
-            sys.exit()     
-
-        Utils.assets = config.assets
-        # screencap init
-        Utils.init_screencap_mode(config.screenshot_mode)
-        Utils.init_ocr_mode()
-        Utils.record['restart_attempts'] = config.restart_attempts
-    else:
-        Logger.log_error('Unable to connect to the service.')
-        sys.exit()
+    start_adb()
 
 except:
     print(f'[ERROR] Script Initialisation Error. For more info, check the traceback.log file.')
@@ -263,7 +255,7 @@ while counter != len(run_cycles):
         counter += 1
         task_started = False
 
-        
+Logger.log_info("All assigned tasks were executed.")
 
 
         

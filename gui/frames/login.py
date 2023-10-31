@@ -67,12 +67,17 @@ class LoginFrame(customtkinter.CTkFrame):
         self.core_label = customtkinter.CTkLabel(self, text="Startup", font=customtkinter.CTkFont(family="Inter", size=26, weight="bold"))
         self.core_label.grid(row=6, column=0, sticky="nw", padx=20, pady=20)
 
-        self.autostart_checkbox = customtkinter.CTkCheckBox(self, text="Auto Start Script", font=customtkinter.CTkFont(size=20, weight="bold"), command=lambda x=["login", "auto_start"]: self.config.save_to_json(x))
+        self.autostart_checkbox = customtkinter.CTkCheckBox(self, text="Auto Start Script", font=customtkinter.CTkFont(size=20, weight="bold", underline=True), command=lambda x=["login", "auto_start"]: self.config.save_to_json(x))
+        self.rautostart_tootltip = CTkToolTip(self.autostart_checkbox, message="Script will automatically start after launching BAAuto.", wraplength=400)
         self.autostart_checkbox.grid(row=7, column=0, padx=40, pady=(20, 10), sticky="nw")
         self.linker.widgets["login"]["auto_start"] = self.autostart_checkbox
 
     def create_emulator_widgets(self):
-        self.emulator_checkbox = customtkinter.CTkCheckBox(self, text="Launch Emulator", font=customtkinter.CTkFont(size=20), command=lambda x=["login", "launch_emulator"]: self.config.save_to_json(x))
+        self.emulator_checkbox = customtkinter.CTkCheckBox(self, text="Launch Emulator", font=customtkinter.CTkFont(size=20, underline=True), command=lambda x=["login", "launch_emulator"]: self.config.save_to_json(x))
+        self.emulator_tooltip = CTkToolTip(self.emulator_checkbox, 
+                                           message="When enabled, the script will launch the emulator if it doesn't find any device with the specified address. Emulator path MUST be provided and be valid.", 
+                                           wraplength=400)
+        
         self.emulator_checkbox.grid(row=8, column=0, padx=40, pady=(20, 10), sticky="nw")
         self.linker.widgets["login"]["launch_emulator"] = self.emulator_checkbox
 
@@ -84,7 +89,8 @@ class LoginFrame(customtkinter.CTkFrame):
         self.emulator_path_button = customtkinter.CTkButton(self, width=50, text="Select", command = self.open_file)
         self.emulator_path_button.grid(row=9, column=2, padx=20, pady=(20, 10), sticky="nsew")
 
-        self.delay_label = customtkinter.CTkLabel(self, text="Delay time (s)", font=customtkinter.CTkFont(size=20))
+        self.delay_label = customtkinter.CTkLabel(self, text="Delay time (s)", font=customtkinter.CTkFont(size=20, family="Inter", underline=True))
+        self.delay_tooltip = CTkToolTip(self.delay_label, message="The time for the script to wait after launching the emulator", wraplength=400)
         self.delay_label.grid(row=10, column=0, padx=20, pady=(20, 10))
 
         self.delay_spinbox = CTkIntegerSpinbox(self, step_size=1, min_value=0, command=lambda x=["login", "delay"]:self.config.save_to_json(x))
