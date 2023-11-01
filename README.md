@@ -36,7 +36,7 @@ For the best experience, configure your Blue Archive settings as follows:
 - Minimum: Medium graphics settings at 30fps.
 - Recommended: Medium, High, or Very High graphics settings at 60fps.
   
-Please note that BAAuto may require adjustments if you choose lower graphics settings than the ones listed above.
+Please note that BAAuto may require adjustments to the source code if you choose lower graphics settings than the ones listed above.
 
 ## Installation and Usage
 Follow these steps to get BAAuto up and running:
