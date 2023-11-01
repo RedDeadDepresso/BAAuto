@@ -10,12 +10,17 @@ UPDATE: Someone is making one with more features planned than mine https://githu
 * Python 3.7.X installed and added to PATH.
 * Latest [ADB](https://developer.android.com/studio/releases/platform-tools) added to PATH.
 * ADB debugging enabled emulator with **1280x720 resolution** and **Android 5 or newer**.
-  
+
+## Supported Emulators
+* Bluestacks
+* LDPlayer9
+* MuMu Player
+Other emulators may work but these are the only one I tested and they work without any problems.
+
 ## Graphics Settings in Blue Archive
 * Minimum: Medium at 30fps
 * Recommended: Medium, High or Very High at 60 fps. 
 * Lower settings may be possible with some changes to the script.
-* Tested on Windows 11 with BlueStacks.
 
 ## Installation and Usage
 1. Clone or download this repository.
