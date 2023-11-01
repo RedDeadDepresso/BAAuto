@@ -15,6 +15,7 @@ UPDATE: Someone is making one with more features planned than mine https://githu
 * Bluestacks
 * LDPlayer9
 * MuMu Player
+
 Other emulators may work but these are the only one I tested and they work without any problems.
 
 ## Graphics Settings in Blue Archive
