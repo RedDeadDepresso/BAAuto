@@ -4,7 +4,7 @@
 
 BAAuto is a Python-based automation tool designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's ALAuto, unfortunately only for the Global server with support for English and Chinese languages. With a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming.
 
-UPDATE: Another project, [MaaAssistantArknights/MBA](https://github.com/MaaAssistantArknights/MBA), is currently in development with more planned features than mine. I'll continue to support and maintain BAAuto until MBA reaches a significant stage in its development. Please note that I do not intend to introduce any new features to BAAuto.
+UPDATE: Another project, [MaaAssistantArknights/MBA](https://github.com/MaaAssistantArknights/MBA), is currently in development with more planned features. BAAuto will be supported until MBA reaches a significant stage in its development. However, no new features will be added in BAAuto.
 
 ## Table of Contents
 - [Requirements on Windows](#requirements-on-windows)
@@ -52,6 +52,8 @@ Follow these steps to get BAAuto up and running:
 9. If you've selected "Exit Emulator" or "Exit BAAuto and Emulator", provide the emulator path. For BlueStacks instances, create a shortcut for Blue Archive from the instance and choose it as the emulator path to ensure BAAuto only closes that specific instance.
 10. If you'd like to create new assets, you can refer to [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
 
+Please feel free to use and modify BAAuto as you see fit. Your feedback and contributions are always welcome.
+
 ## Known Bugs
 Here are some known issues with BAAuto:
 
@@ -67,5 +69,3 @@ I'd like to express my gratitude to the following individuals, listed in no part
 - [hgjhgj](https://github.com/hgjazhgj): Supplied the BAAuto OCR library and was the first to star the repository, which greatly motivated me.
 - [LmeSzinc](https://github.com/LmeSzinc) and [MistEO](https://github.com/MistEO): Creators of Alas and MAA, respectively, who inspired me to develop BAAuto.
 - [TomSchimansky](https://github.com/TomSchimansky): Created customtkinter, making it possible for an inexperienced programmer like me to create a modern GUI.
-
-Please feel free to use and modify BAAuto as you see fit. Your feedback and contributions are always welcome.
