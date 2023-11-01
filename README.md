@@ -1,61 +1,71 @@
-# BAAuto
 ![example](https://github.com/RedDeadDepresso/BAAuto/assets/94017243/8c661360-5667-401a-986d-3fb0f7400462)
-A modified version of [Egoistically's ALAuto](https://github.com/Egoistically/ALAuto) adapted for Blue Archive with GUI to automate simple tasks. Currently, only for the Global server with support for English and Chinese language, but it should be easy to implement new servers by changing the templates.
 
-Tasks supported: Login, Cafe, Bounty, Scrimmage, Tactical Challenge, Mission/Commissions/Event and Claim Rewards
+# BAAuto: Blue Archive Automation Tool
 
-UPDATE: Someone is making one with more features planned than mine https://github.com/MaaAssistantArknights/MBA. I will try to maintain BAAuto until MBA is at a decent point in development. However, I don't plan to add any new features.
+BAAuto is a Python-based automation tool designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's ALAuto, unfortunately only for the Global server with support for English and Chinese languages. With a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming.
+
+UPDATE: Another project is currently in development at MaaAssistantArknights/MBA with more planned features than mine. I'll continue to support and maintain BAAuto until MBA reaches a significant stage in its development. Please note that I do not intend to introduce any new features to BAAuto.
+
+## Table of Contents
+- [Requirements on Windows](#requirements-on-windows)
+- [Supported Emulators](#supported-emulators)
+- [Graphics Settings in Blue Archive](#graphics-settings-in-blue-archive)
+- [Installation and Usage](#installation-and-usage)
+- [Known Bugs](#known-bugs)
+- [Acknowledgment](#acknowledgment)
 
 ## Requirements on Windows
-* Python 3.7.X installed and added to PATH.
-* Latest [ADB](https://developer.android.com/studio/releases/platform-tools) added to PATH.
-* ADB debugging enabled emulator with **1280x720 resolution** and **Android 5 or newer**.
+To use BAAuto effectively, you'll need the following:
+
+- Python 3.7.X installed and added to your system's PATH.
+- The latest [ADB](https://developer.android.com/studio/releases/platform-tools) added to your system's PATH.
+- An ADB-debugging enabled emulator with a resolution of **1280x720** and running Android 5 or newer.
 
 ## Supported Emulators
-* Bluestacks
-* LDPlayer9
-* MuMu Player
+BAAuto has been tested and confirmed to work with the following emulators:
 
-Other emulators may work but these are the only one I tested and they work without any problems.
+- Bluestacks
+- LDPlayer9
+- MuMu Player
+
+While other emulators may work, these have been tested extensively and are recommended for optimal performance.
 
 ## Graphics Settings in Blue Archive
-* Minimum: Medium at 30fps
-* Recommended: Medium, High or Very High at 60 fps. 
-* Lower settings may be possible with some changes to the script.
+For the best experience, configure your Blue Archive settings as follows:
+
+- Minimum: Medium graphics settings at 30fps.
+- Recommended: Medium, High, or Very High graphics settings at 60fps.
+  
+Please note that BAAuto may require adjustments if you choose lower graphics settings than the ones listed above.
 
 ## Installation and Usage
+Follow these steps to get BAAuto up and running:
+
 1. Clone or download this repository.
-2. Install the required packages via `pip3` with the command `pip3 install -r requirements.txt`.
-3. Enable adb debugging on your emulator.
-4. Run `BAAuto.py` and change connection address to your emulator's adb port, then change the rest to your likings. 
-5. Changes are automatically saved except for Mission/Commissions/Event in the Farming section
-6. For Event you have to upload a crop of the event banner from homescreen or campaign screen without any background in assets/EN/goto and save it as event_banner.png.
-7. DO NOT set the number of sweeps higher than 30. This will make BAAuto think that the game is stuck.
-8. If you enabled Tap Students in Cafe, zoom out and swipe to bottom-left so that the bottom-left corner is visible before starting the script. Please make a pull request if you know how to zoom out using Adb.
-9. If you selected Exit Emulator or Exit BAAuto and Emulator in then section, please provide the emulator path. If you are using instances of bluestacks, create a shortcut of Blue Archive from the instance and choose this as emulator path. This will make sure BAAuto will only close that specific instance.
-10. Check the [Alauto's Wiki](https://github.com/Egoistically/ALAuto/wiki/Config.ini-and-Modules-explanation), some information are still relevant.
+2. Install the required packages using `pip3` with the command `pip3 install -r requirements.txt`.
+3. Ensure that ADB debugging is enabled on your emulator.
+4. Run `BAAuto.py` and modify the connection address to match your emulator's ADB port and configure other settings to your preference.
+5. Changes are automatically saved except for the Mission/Commissions/Event section.
+6. For Event, you need to upload a cropped image of the event banner (without a background) in the `assets/EN/goto` or `assets/CN/goto` directory and save it as `event_banner.png`.
+7. Avoid setting the number of sweeps higher than 30, as this may cause BAAuto to assume the game is stuck.
+8. If you've enabled "Tap Students" in the Cafe, make sure to zoom out and swipe to the bottom-left corner before starting the script. You can make a pull request if you have a solution for zooming out using ADB.
+9. If you've selected "Exit Emulator" or "Exit BAAuto and Emulator", provide the emulator path. For BlueStacks instances, create a shortcut for Blue Archive from the instance and choose it as the emulator path to ensure BAAuto only closes that specific instance.
+10. If you'd like to create new assets, you can refer to [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
 
-## Relevant information
-* If you'd like to create new assets you can check [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
-* The GUI was inspired by [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) and [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript). It is just an interface to modify config.json and display script.py output.
-* I am sorry if it does not follow best practices sometimes since this is my first project I tried to minimise modification to the original script. 
-* Feel free to do whatever you want with BAAuto, I do not mind.
+## Known Bugs
+Here are some known issues with BAAuto:
 
-## Changes Made
-* Changed resolution from 1920x1080 to 1280x720. 
-* Changed config file to json.
-* Implemented uiautomator2 to detect crashes. Threshold are same consecutive 60 clicks or 35 swipes.
+- Ascreencap does not work; use uiautomator2 instead.
+- The script relies heavily on "time.sleep()," which can make it slower at times.
+- There's no implementation of data validation for the "config.json" file. The GUI and script may crash if the file is corrupted or contains incorrect data.
 
-## Bugs
-* Ascreencap does not work. Use uiautomator2 instead.
-* The GUI is a mess, in particularly the Mission/Commissions/Event section.
-* The script depends highly on time.sleep() making it sometimes slow.
-* No implementation of data validation for the config.json. GUI and Script will most likely crash if the file is corrupted or have incorrect data.
+## Acknowledgment
+I'd like to express my gratitude to the following individuals, listed in no particular order:
 
-## Acknowledgement
-The project was not possible thanks to these people, with no specific order of importance:
-  - [Akascape](https://github.com/Akascape), who provided complex yet easy to use customtkinter widgets.
-  - [Egoistically](https://github.com/Egoistically), for making ALAuto open-source and providing the foundations to build BAAuto.
-  - [hgjhgj](https://github.com/hgjazhgj), not only for supplying the BAAuto OCR library but also for being first to star the repo, which greatly motivated me.
-  - [LmeSzinc](https://github.com/LmeSzinc) and [MistEO](https://github.com/MistEO), the creators of Alas and MAA, respectively, who served as an inspiration for me to develop my own bot.
-  - [TomSchimansky](https://github.com/TomSchimansky), whose created customtkinter allowing an inexperienced programmer like me to create a modern GUI.
+- [Akascape](https://github.com/Akascape): Provided customtkinter widgets that are both complex and user-friendly.
+- [Egoistically](https://github.com/Egoistically): For making ALAuto open-source and providing the foundation for BAAuto.
+- [hgjhgj](https://github.com/hgjazhgj): Supplied the BAAuto OCR library and was the first to star the repository, which greatly motivated me.
+- [LmeSzinc](https://github.com/LmeSzinc) and [MistEO](https://github.com/MistEO): Creators of Alas and MAA, respectively, who inspired me to develop BAAuto.
+- [TomSchimansky](https://github.com/TomSchimansky): Created customtkinter, making it possible for an inexperienced programmer like me to create a modern GUI.
+
+Please feel free to use and modify BAAuto as you see fit. Your feedback and contributions are always welcome.
