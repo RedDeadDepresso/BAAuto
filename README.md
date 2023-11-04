@@ -2,6 +2,7 @@
 
 # BAAuto: Blue Archive Automation Tool
 [![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/RedDeadDepresso/84e419b16021027dea1d1360e429649f/raw/clone.json&logo=github)](https://github.com/MShawon/github-clone-count-badge)
+
 BAAuto is a Python-based automation tool designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's [ALAuto](https://github.com/Egoistically/ALAuto), unfortunately only for the Global server with support for English and Chinese languages. With a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming.
 
 UPDATE: Another project, [MaaAssistantArknights/MBA](https://github.com/MaaAssistantArknights/MBA), is currently in development with more planned features. BAAuto will be supported until MBA reaches a significant stage in its development. However, no new features will be added.
