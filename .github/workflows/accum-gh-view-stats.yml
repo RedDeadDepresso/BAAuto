@@ -39,9 +39,9 @@ jobs:
 
           env: >-
             ENABLE_GENERATE_CHANGELOG_FILE=1
-            ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1                            # insert the time string in format `HH:MMZ` additionally after the date in each commit message
-            ENABLE_COMMIT_MESSAGE_DATE_TIME_WITH_LAST_CHANGED_DATE_OFFSET=1   # insert datetime suffix as offset to the last changed date in format `-DDT` to note the closest changed date
-            ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1                  # insert the workflow run number after date/time prefix in each commit message
+            ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1                            
+            ENABLE_COMMIT_MESSAGE_DATE_TIME_WITH_LAST_CHANGED_DATE_OFFSET=1   
+            ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1                  
             ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1
             ENABLE_REPO_STATS_COMMITS_URL_PRINT_TO_CHANGELOG=1
           #  CONTINUE_ON_INVALID_INPUT=1
