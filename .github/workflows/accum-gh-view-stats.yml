@@ -1,0 +1,50 @@
+name: GitHub views counter for 14 days at every 8 hours and views accumulator
+
+on:
+  schedule:
+    - cron: "0 */8 * * *"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  accum-gh-view-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: RedDeadDepresso/gh-action--accum-gh-stats@master
+        with:
+          deps_repo_owner:          RedDeadDepresso
+          deps_repo_branch:         master
+          deps_repo_read_token:     ${{ github.token }}
+
+          stat_repo_owner:          RedDeadDepresso
+          stat_repo:                BAAuto
+          stat_entity:              views
+          stat_repo_read_token:     ${{ secrets.READ_STATS_TOKEN }}
+          stats_list_key:           views
+
+          #commit_msg_entity:        vi
+
+          curl_flags: >-
+            -H 'Cache-Control: no-cache'
+
+          output_repo_owner:        RedDeadDepresso
+          output_repo:              BAAuto--gh-stats
+          output_repo_branch:       master
+          output_repo_dir:          traffic/views
+          output_repo_write_token:  ${{ secrets.WRITE_STATS_TOKEN }}
+
+          flags: >-
+            ENABLE_PRINT_INITIAL_ENV_INTO_STDOUT=1
+
+          env: >-
+            ENABLE_GENERATE_CHANGELOG_FILE=1
+            ENABLE_COMMIT_MESSAGE_DATE_WITH_TIME=1                            # insert the time string in format `HH:MMZ` additionally after the date in each commit message
+            ENABLE_COMMIT_MESSAGE_DATE_TIME_WITH_LAST_CHANGED_DATE_OFFSET=1   # insert datetime suffix as offset to the last changed date in format `-DDT` to note the closest changed date
+            ENABLE_COMMIT_MESSAGE_WITH_WORKFLOW_RUN_NUMBER=1                  # insert the workflow run number after date/time prefix in each commit message
+            ENABLE_GITHUB_ACTIONS_RUN_URL_PRINT_TO_CHANGELOG=1
+            ENABLE_REPO_STATS_COMMITS_URL_PRINT_TO_CHANGELOG=1
+          #  CONTINUE_ON_INVALID_INPUT=1
+          #  CONTINUE_ON_EMPTY_CHANGES=1
+          #  CONTINUE_ON_RESIDUAL_CHANGES=1
+          #  CHANGELOG_FILE=changelog.txt
