@@ -14,7 +14,7 @@ jobs:
       - uses: RedDeadDepresso/gh-action--accum-gh-stats@master
         with:
           deps_repo_owner:          RedDeadDepresso
-          deps_repo_branch:         main
+          deps_repo_branch:         master
           deps_repo_read_token:     ${{ github.token }}
 
           stat_repo_owner:          RedDeadDepresso
@@ -30,7 +30,7 @@ jobs:
 
           output_repo_owner:        RedDeadDepresso
           output_repo:              BAAuto--gh-stats
-          output_repo_branch:       main
+          output_repo_branch:       master
           output_repo_dir:          traffic/clones
           output_repo_write_token:  ${{ secrets.WRITE_STATS_TOKEN }}
 
