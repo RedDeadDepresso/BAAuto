@@ -84,6 +84,6 @@ I'd like to express my gratitude to the following individuals, listed in no part
 
 - [Akascape](https://github.com/Akascape): Provided customtkinter widgets that are both complex and user-friendly.
 - [Egoistically](https://github.com/Egoistically): For making ALAuto open-source and providing the foundation for BAAuto.
-- [hgjhgj](https://github.com/hgjazhgj): the creator of OCR library BAAuto is using and the first to star the repository, which greatly motivated me.
+- [hgjhgj](https://github.com/hgjazhgj): Created the OCR library BAAuto is using and the first to star the repository, which greatly motivated me.
 - [LmeSzinc](https://github.com/LmeSzinc) and [MistEO](https://github.com/MistEO): Creators of Alas and MAA, respectively, who inspired me to develop BAAuto.
 - [TomSchimansky](https://github.com/TomSchimansky): Created customtkinter, making it possible for an inexperienced programmer like me to create a modern GUI.
