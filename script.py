@@ -152,7 +152,7 @@ try:
             Utils.assets = config.assets
             # screencap init
             Utils.init_screencap_mode(config.screenshot_mode)
-            Utils.init_ocr_mode()
+            Utils.init_ocr_mode(EN=True)
             Utils.record['restart_attempts'] = config.restart_attempts
         else:
             if config.login["launch_emulator"]:
@@ -256,6 +256,4 @@ while counter != len(run_cycles):
         task_started = False
 
 Logger.log_info("All assigned tasks were executed.")
-
-
-        
+sys.exit(0)

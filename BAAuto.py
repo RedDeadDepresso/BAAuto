@@ -141,7 +141,7 @@ class Linker:
         self.switch_queue_state("normal")
         self.script = None
         if "All assigned tasks were executed." in line:
-            self.sidebar.master.after(1200, self.execute_then)
+            self.sidebar.master.after(10, self.execute_then)
 
     def switch_queue_state(self, state):
         farming_frame = self.modules_dictionary["farming"]["frame"]
@@ -174,7 +174,10 @@ class Linker:
         then = self.config.config_data["then"]
         emulator_path = self.config.config_data["login"]["emulator_path"]
 
-        if then == "Exit BAAuto":
+        if then == "Do Nothing":
+            return
+
+        elif then == "Exit BAAuto":
             self.sidebar.master.destroy()
 
         elif then == "Exit Emulator":

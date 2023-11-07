@@ -133,15 +133,17 @@ class Utils(object):
             Adb.shell('chmod 0777 /data/local/tmp/ascreencap')
 
     @classmethod
-    def init_ocr_mode(cls):
+    def init_ocr_mode(cls, EN=None):
         # https://github.com/hgjazhgj/pponnxcr
-        server_to_ocr = {   
-        "ZHS": 'zhs',
-        "CN":'zht',
-        "JP":'ja',
-        "EN":'en'
-        }
-        cls.ocr = TextSystem(server_to_ocr[cls.assets])
+        if EN:
+            cls.ocr = TextSystem('en')
+        else:
+            server_to_ocr = {   
+            "ZHS": 'zhs',
+            "CN":'zht',
+            "JP":'ja',
+            }
+            cls.ocr = TextSystem(server_to_ocr[cls.assets])
 
     @staticmethod
     def reposition_byte_pointer(byteArray):
@@ -311,59 +313,6 @@ class Utils(object):
         return thresh
 
     @classmethod
-    def get_enabled_ship_filters(cls, filter_categories="rarity"):
-        """Method which returns the regions of all the options enabled for the current sorting filter.
-
-        Args:
-            filter_categories (string): a string of ';' separated values, which states the filters' categories
-                to take into account for the detection.
-        Returns:
-            regions (list): a list containing the Region objects detected.
-        """
-        image = cls.get_color_screen()
-        categories = filter_categories.split(';')
-
-        # mask area of no interest, effectively creating a roi
-        roi = numpy.full((image.shape[0], image.shape[1]), 0, dtype=numpy.uint8)
-        if "rarity" in categories:
-            cv2.rectangle(roi, (410, 647), (1835, 737), color=(255, 255, 255), thickness=-1)
-        if "extra" in categories:
-            cv2.rectangle(roi, (410, 758), (1835, 847), color=(255, 255, 255), thickness=-1)
-
-        # preparing the ends of the interval of blue colors allowed, BGR format
-        lower_blue = numpy.array([132, 97, 66], dtype=numpy.uint8)
-        upper_blue = numpy.array([207, 142, 92], dtype=numpy.uint8)
-
-        # find the colors within the specified boundaries
-        mask = cv2.inRange(image, lower_blue, upper_blue)
-
-        # apply roi, result is a black and white image where the white rectangles are the options enabled
-        result = cv2.bitwise_and(roi, mask)
-
-        # obtain countours, needed to calculate the rectangles' positions
-        cnts = cv2.findContours(result, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cnts = grab_contours(cnts)
-        # filter regions with a contour area inferior to 190x45=8550 (i.e. not a sorting option)
-        cnts = list(filter(lambda x: cv2.contourArea(x) > 8550, cnts))
-        # loop over the contours and extract regions
-        regions = []
-        for c in cnts:
-            # calculates contours perimeter
-            perimeter = cv2.arcLength(c, True)
-            # approximates perimeter to a polygon with the specified precision
-            approx = cv2.approxPolyDP(c, 0.04 * perimeter, True)
-
-            if len(approx) == 4:
-                # if approx is a rectangle, get bounding box
-                x, y, w, h = cv2.boundingRect(approx)
-                # print values
-                Logger.log_debug("Region x:{}, y:{}, w:{}, h:{}".format(x, y, w, h))
-                # appends to regions' list
-                regions.append(Region(x, y, w, h))
-
-        return regions
-
-    @classmethod
     def show_on_screen(cls, coordinates):
         """ Shows the position of the received coordinates on a screenshot
             through green dots. It pauses the script. Useful for debugging.
@@ -431,17 +380,6 @@ class Utils(object):
 
         text = "".join(text)
         return int(text)
-
-    @classmethod
-    def menu_navigate(cls, image):
-        cls.update_screen()
-
-        while not cls.find(image, 0.85):
-            if image == "menu/button_battle":
-                cls.touch_randomly(Region(54, 57, 67, 67))
-                cls.wait_update_screen(1)
-
-        return
 
     @classmethod
     def find(cls, image, similarity=DEFAULT_SIMILARITY, color=False):

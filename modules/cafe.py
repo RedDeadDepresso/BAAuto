@@ -70,6 +70,7 @@ class CafeModule(object):
             Utils.wait_update_screen(1)
         
         # Continue searching for the student until found or no more students are available
+        Utils.init_ocr_mode()
         while not found:
             Utils.wait_update_screen(1)
             
@@ -99,3 +100,4 @@ class CafeModule(object):
             else:
                 last_student = result[1] if not result[1].isdigit() else last_student
                 Utils.swipe(600, 500, 600, 200)  # Swipe to scroll the momotalk region
+        Utils.init_ocr_mode(EN=True)
