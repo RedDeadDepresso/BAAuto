@@ -1,13 +1,13 @@
 {
   "login": {
-    "enabled": true,
+    "enabled": false,
     "network": "127.0.0.1:5557",
     "screenshot_mode": "UIAUTOMATOR2",
-    "server": "CN",
-    "restart_attempts": 2,
-    "auto_start": true,
-    "launch_emulator": true,
-    "emulator_path": "C:/Users/mizan/Desktop/BlueArchive - Blue Archive.lnk",
+    "server": "EN",
+    "restart_attempts": 1,
+    "auto_start": false,
+    "launch_emulator": false,
+    "emulator_path": "",
     "delay": 60
   },
   "farming": {
@@ -47,28 +47,13 @@
       "rank": "lowest"
     },
     "mission": {
-      "enabled": true,
+      "enabled": false,
       "reset_daily": true,
       "last_run": "2023-11-06 23:57:28",
       "reset_time": "19:00:00",
       "recharge_ap": true,
       "preferred_template": "template1",
       "queue": [
-        [
-          "H",
-          "2-2",
-          2
-        ],
-        [
-          "H",
-          "1-1",
-          3
-        ],
-        [
-          "H",
-          "1-3",
-          3
-        ],
         [
           "N",
           "7-3",
@@ -125,7 +110,7 @@
   "cafe": {
     "enabled": false,
     "invite_student": true,
-    "student_name": "Karin",
+    "student_name": "Airi",
     "tap_students": true,
     "claim_earnings": true
   },
@@ -135,5 +120,5 @@
     "tasks": true,
     "mailbox": true
   },
-  "then": "Exit BAAuto"
+  "then": "Do Nothing"
 }
