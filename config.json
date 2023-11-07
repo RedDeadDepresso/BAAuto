@@ -47,13 +47,19 @@
       "rank": "lowest"
     },
     "mission": {
-      "enabled": true,
+      "enabled": false,
       "reset_daily": true,
-      "last_run": "2023-10-29 01:38:25",
+      "last_run": "2023-11-06 23:57:28",
       "reset_time": "19:00:00",
       "recharge_ap": true,
       "preferred_template": "template1",
-      "queue": [],
+      "queue": [
+        [
+          "N",
+          "7-3",
+          35
+        ]
+      ],
       "event": false,
       "templates": {
         "template1": [
@@ -104,7 +110,7 @@
   "cafe": {
     "enabled": false,
     "invite_student": true,
-    "student_name": "Karin",
+    "student_name": "Airi",
     "tap_students": true,
     "claim_earnings": true
   },
@@ -114,5 +120,5 @@
     "tasks": true,
     "mailbox": true
   },
-  "then": "Exit Emulator"
+  "then": "Do Nothing"
 }

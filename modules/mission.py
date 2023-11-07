@@ -106,7 +106,7 @@ class MissionModule(object):
 
             while Utils.find('farming/normal'):
                 Utils.touch(1065, 160)
-                Utils.update_screen()
+                Utils.wait_update_screen(1)
         else:
             while not Utils.find('farming/normal'):
                 Utils.touch(915, 160)
@@ -177,7 +177,7 @@ class MissionModule(object):
 
             if button:
                 while True:
-                    Utils.update_screen()
+                    Utils.wait_update_screen(1)
                     if not Utils.find('farming/sweep'):
                         Utils.touch_randomly(button)
                         continue
