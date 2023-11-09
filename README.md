@@ -35,9 +35,11 @@ UPDATE: Another project, [MaaAssistantArknights/MBA](https://github.com/MaaAssis
 ## Requirements on Windows
 To use BAAuto effectively, you'll need the following:
 
-- Python 3.7.X installed and added to your system's PATH.
+- Python 3.12 or latest, installed and added to your system's PATH.
 - The latest [ADB](https://developer.android.com/studio/releases/platform-tools) added to your system's PATH.
 - An ADB-debugging enabled emulator with a resolution of **1280x720** and running Android 5 or newer.
+
+[Here are some detailed instructions to set up the environment](https://github.com/RedDeadDepresso/BAAuto/issues/7#issuecomment-1747275236)
 
 ## Supported Emulators
 BAAuto has been tested and confirmed to work with the following emulators:
