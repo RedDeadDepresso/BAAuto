@@ -78,6 +78,7 @@ Here are some known issues with BAAuto:
 - Ascreencap does not work; use uiautomator2 instead.
 - The script relies heavily on "time.sleep()," which can make it slower at times.
 - There's no implementation of data validation for the "config.json" file. The GUI and script may crash if the file is corrupted or contains incorrect data.
+- Sometimes BAAuto thinks the script is still running when it isn't. This is due to some threading issues.
 
 ## Acknowledgment
 I'd like to express my gratitude to the following individuals, listed in no particular order:
