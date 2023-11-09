@@ -47,19 +47,13 @@
       "rank": "lowest"
     },
     "mission": {
-      "enabled": false,
+      "enabled": true,
       "reset_daily": true,
-      "last_run": "2023-11-06 23:57:28",
+      "last_run": "2023-11-07 20:51:54",
       "reset_time": "19:00:00",
       "recharge_ap": true,
       "preferred_template": "template1",
-      "queue": [
-        [
-          "N",
-          "7-3",
-          35
-        ]
-      ],
+      "queue": [],
       "event": false,
       "templates": {
         "template1": [
@@ -99,9 +93,19 @@
             3
           ],
           [
-            "N",
-            "7-3",
-            35
+            "E",
+            "08",
+            30
+          ],
+          [
+            "E",
+            "08",
+            30
+          ],
+          [
+            "E",
+            "30",
+            30
           ]
         ]
       }
@@ -120,5 +124,5 @@
     "tasks": true,
     "mailbox": true
   },
-  "then": "Do Nothing"
+  "then": "Exit BAAuto and Emulator"
 }
