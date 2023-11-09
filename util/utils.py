@@ -142,6 +142,7 @@ class Utils(object):
             "ZHS": 'zhs',
             "CN":'zht',
             "JP":'ja',
+            "EN":'en',
             }
             cls.ocr = TextSystem(server_to_ocr[cls.assets])
 
