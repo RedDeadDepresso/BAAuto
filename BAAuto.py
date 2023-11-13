@@ -100,6 +100,13 @@ class Linker:
         }
         self.should_then = False
 
+    def terminate_script(self):
+        # If process is running, terminate it
+        self.script.terminate()
+        self.script = None
+        self.sidebar.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
+        self.switch_queue_state("normal")
+
     def switch_student_list(self):
         server = self.config.config_data["login"]["server"]
         with open(f"gui/student_list/{server}.json", "r") as f:
@@ -109,12 +116,7 @@ class Linker:
         
     def start_stop(self):
         if hasattr(self, 'script') and self.script is not None:
-            # If process is running, terminate it
-            self.script.terminate()
-            self.script = None
-            self.sidebar.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
-            self.switch_queue_state("normal")
-
+            self.terminate_script()
         else:
             # If process is not running, start it
             self.script = subprocess.Popen(['python', 'script.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -123,9 +125,17 @@ class Linker:
             self.switch_queue_state("disabled")
 
     def read_output(self):
-        line = ""
-        for line in iter(self.script.stdout.readline, b''):
-            line = line.decode("utf-8")  # Decode the bytes to a string
+        while self.script is not None:
+            line = self.script.stdout.readline().decode('utf-8')
+            for string in ['Terminating...', "All assigned tasks were executed."]:
+                if string in line or line == '':
+                    if hasattr(self, 'script') and self.script is not None:
+                        self.terminate_script()
+
+                    if "All assigned tasks were executed." in line:
+                        self.sidebar.master.after(10, self.execute_then)
+                    return  # Break the loop if there's no more output and the subprocess has finished
+
             # Check if line contains any log level
             for level, color in self.logger.log_level_colors.items():
                 if level in line:
@@ -134,14 +144,9 @@ class Linker:
                     self.logger.log_textbox.insert("end", line, level)
                     self.logger.log_textbox.configure(state="disabled")
                     break
+
             if self.logger.autoscroll_enabled:
                 self.logger.log_textbox.yview_moveto(1.0)
-        # If process ends, change button text to 'Start'
-        self.sidebar.start_button.configure(text="Start", fg_color = ['#3B8ED0', '#1F6AA5'])
-        self.switch_queue_state("normal")
-        self.script = None
-        if "All assigned tasks were executed." in line:
-            self.sidebar.master.after(10, self.execute_then)
 
     def switch_queue_state(self, state):
         farming_frame = self.modules_dictionary["farming"]["frame"]
@@ -170,7 +175,9 @@ class Linker:
         self.sidebar.master.after(2500, new_notification.destroy)
     
     def execute_then(self):
-        print("I was called")
+        if hasattr(self, 'script') and self.script is not None:
+            self.terminate_script()
+
         then = self.config.config_data["then"]
         emulator_path = self.config.config_data["login"]["emulator_path"]
 

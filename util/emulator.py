@@ -48,7 +48,7 @@ class Emulator:
                     process_cmdline = process_info.get('cmdline', '')
                     # Compare the executable path and command line arguments
                     if (os.path.normcase(process_exe) == os.path.normcase(emulator_path)):
-                        if target_args == None or cls.match_list(target_args, process_cmdline):
+                        if target_args is None or (process_cmdline and cls.match_list(target_args, process_cmdline)):
                             p = psutil.Process(process_info['pid'])
                             p.terminate()
                             return True  # Emulator process terminated successfully
