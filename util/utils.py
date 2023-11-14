@@ -340,48 +340,6 @@ class Utils(object):
         """
         cv2.rectangle(screen, (region.x, region.y), (region.x+region.w, region.y+region.h), color=color, thickness=thickness)
 
-    @staticmethod
-    def read_numbers(x, y, w, h, max_digits=5):
-        """ Method to ocr numbers.
-            Returns int.
-        """
-        text = []
-
-        crop = screen[y:y + h, x:x + w]
-        crop = cv2.resize(crop, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
-        thresh = cv2.threshold(crop, 0, 255, cv2.THRESH_OTSU)[1]
-
-        cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-        cnts = grab_contours(cnts)
-        cnts = contours.sort_contours(cnts, method="left-to-right")[0]
-
-        if len(cnts) > max_digits:
-            return 0
-
-        for c in cnts:
-            scores = []
-
-            (x, y, w, h) = cv2.boundingRect(c)
-            roi = thresh[y:y + h, x:x + w]
-            row, col = roi.shape[:2]
-
-            width = round(abs((50 - col)) / 2) + 5
-            height = round(abs((94 - row)) / 2) + 5
-            resized = cv2.copyMakeBorder(roi, top=height, bottom=height, left=width, right=width,
-                                         borderType=cv2.BORDER_CONSTANT, value=[0, 0, 0])
-
-            for x in range(0, 10):
-                template = cv2.imread("assets/numbers/{}.png".format(x), 0)
-
-                result = cv2.matchTemplate(resized, template, cv2.TM_CCOEFF_NORMED)
-                (_, score, _, _) = cv2.minMaxLoc(result)
-                scores.append(score)
-
-            text.append(str(numpy.argmax(scores)))
-
-        text = "".join(text)
-        return int(text)
-
     @classmethod
     def find(cls, image, similarity=DEFAULT_SIMILARITY, color=False):
         """Finds the specified image on the screen

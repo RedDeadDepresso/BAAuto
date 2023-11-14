@@ -127,6 +127,10 @@ try:
             Logger.log_info("Enabled sed usage.")
             Adb.enable_legacy(Adb)
 
+    def terminate():
+        print("Terminating...")
+        sys.exit(0)
+
     with open('traceback.log', 'w') as f:
         pass
 
@@ -143,11 +147,11 @@ try:
 
             if not re.search('1280x720|1280x720', output):
                 Logger.log_error("Resolution is not 1280x720, please change it.")
-                sys.exit()
+                terminate()
 
             if 'com.nexon.bluearchive' not in Adb.u2device.app_list():
                 Logger.log_error("Blue Archive is not installed. Unable to run script.")
-                sys.exit()     
+                terminate()     
 
             Utils.assets = config.assets
             # screencap init
@@ -168,7 +172,7 @@ try:
                     Logger.log_warning("Launch emulator was enabled but path is invalid.")
 
             Logger.log_error('Unable to connect to the service. Is your device connected?')
-            sys.exit()
+            terminate()
 
     start_adb()
 
@@ -179,7 +183,7 @@ except:
         f.write('\n')
         traceback.print_exc(None, f, True)
         f.write('\n')
-        sys.exit()
+        terminate()
 
 run_cycles = [
     ('Login', script.run_login_cycle),
@@ -212,7 +216,7 @@ while counter != len(run_cycles):
             Logger.log_warning(f"Restart attempts left: {Utils.record['restart_attempts']}")
         else:
             Logger.log_warning(f"Blue Archive is not running but ran out of restart attempts. Unable to restart game and run script.")
-            sys.exit(1)     
+            terminate()     
         Utils.reset_record()
     except GameStuckError:
         if Utils.record['restart_attempts'] > 0:
@@ -224,7 +228,7 @@ while counter != len(run_cycles):
             Utils.reset_record()
         else:
             Logger.log_warning(f"Blue Archive is stuck but ran out of restart attempts. Unable restart game and run script.")
-            sys.exit(1)     
+            terminate()     
     except ReadOCRError:
         if not task_restarted:
             Logger.log_warning("Failed to read OCR. Did you change page? Restarting task...")
@@ -237,7 +241,7 @@ while counter != len(run_cycles):
     except KeyboardInterrupt:
         # handling ^C from user
         Logger.log_msg("Received keyboard interrupt from user. Closing...")
-        sys.exit(0)
+        terminate()
     except SystemExit:
         pass
     except:
@@ -256,4 +260,3 @@ while counter != len(run_cycles):
         task_started = False
 
 Logger.log_info("All assigned tasks were executed.")
-sys.exit(0)

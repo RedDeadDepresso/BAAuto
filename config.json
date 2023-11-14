@@ -5,10 +5,10 @@
     "screenshot_mode": "UIAUTOMATOR2",
     "server": "EN",
     "restart_attempts": 1,
-    "auto_start": false,
+    "auto_start": true,
     "launch_emulator": false,
     "emulator_path": "",
-    "delay": 60
+    "delay": 120
   },
   "farming": {
     "enabled": false,
@@ -16,7 +16,7 @@
       "enabled": true,
       "overpass": {
         "stage": "04",
-        "run_times": 7
+        "run_times": 2
       },
       "desert_railroad": {
         "stage": "04",
@@ -43,18 +43,34 @@
       }
     },
     "tactical_challenge": {
-      "enabled": true,
+      "enabled": false,
       "rank": "lowest"
     },
     "mission": {
       "enabled": true,
       "reset_daily": true,
-      "last_run": "2023-11-07 20:51:54",
+      "last_run": "2023-11-12 20:28:08",
       "reset_time": "19:00:00",
       "recharge_ap": true,
       "preferred_template": "template1",
-      "queue": [],
-      "event": false,
+      "queue": [
+        [
+          "E",
+          "08",
+          19
+        ],
+        [
+          "E",
+          "08",
+          30
+        ],
+        [
+          "E",
+          "30",
+          30
+        ]
+      ],
+      "event": true,
       "templates": {
         "template1": [
           [
@@ -113,7 +129,7 @@
   },
   "cafe": {
     "enabled": false,
-    "invite_student": true,
+    "invite_student": false,
     "student_name": "Airi",
     "tap_students": true,
     "claim_earnings": true
@@ -121,8 +137,8 @@
   "claim_rewards": {
     "enabled": false,
     "club": true,
-    "tasks": true,
-    "mailbox": true
+    "tasks": false,
+    "mailbox": false
   },
-  "then": "Exit BAAuto and Emulator"
+  "then": "Exit BAAuto"
 }

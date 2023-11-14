@@ -234,6 +234,7 @@ class MissionModule(object):
 
         if current_date != last_run_datetime.date() and current_time >= reset_time:
             self.update_config(last_run=True)
+            Logger.log_info("Reset Daily activated. Resetting queue...")
             return True
         return False
 
