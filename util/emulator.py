@@ -22,7 +22,6 @@ class Emulator:
             
             # Extract command line arguments from the shortcut
             arguments = shortcut.Arguments
-            print(arguments)
             arguments = arguments.split(" ")
             if arguments == [""]:
                 arguments = None
