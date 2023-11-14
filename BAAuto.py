@@ -130,7 +130,7 @@ class Linker:
             for string in ['Terminating...', "All assigned tasks were executed."]:
                 if string in line or line == '':
                     if hasattr(self, 'script') and self.script is not None:
-                        self.terminate_script()
+                        self.sidebar.master.after(10, self.terminate_script)
 
                     if "All assigned tasks were executed." in line:
                         self.sidebar.master.after(10, self.execute_then)

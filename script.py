@@ -260,4 +260,3 @@ while counter != len(run_cycles):
         task_started = False
 
 Logger.log_info("All assigned tasks were executed.")
-terminate()
