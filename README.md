@@ -20,9 +20,11 @@
 
 ![example](https://github.com/RedDeadDepresso/BAAuto/assets/94017243/8c661360-5667-401a-986d-3fb0f7400462)
 
-BAAuto is a Python-based automation script designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's [ALAuto](https://github.com/Egoistically/ALAuto), unfortunately only for the Global server with support for English and Chinese languages. With a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming.
+BAAuto is a Python-based automation script designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's [ALAuto](https://github.com/Egoistically/ALAuto), With a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming. It's only for the Global server with support for English and Chinese languages but you can find other Blue Archive scripts for different servers [here](#other-blue-archive-scripts).
 
-UPDATE: Another project, [MaaAssistantArknights/MBA](https://github.com/MaaAssistantArknights/MBA), is currently in development with more planned features. BAAuto will be supported until MBA reaches a significant stage in its development. However, no new features will be added.
+
+UPDATE: I'm currently adapting [ArisuAutoSweeper](https://github.com/TheFunny/ArisuAutoSweeper), a script for Blue Archive built on the Alas framework, to EN. This decision stems from the fact that BAAuto is sluggish, lacks optimisation, and has a buggy GUI. Also, some of BAAuto's features will be implemented into ArisuAutoSweeper. 
+I will try to fix any bugs I encounter in BAAuto during this process but no new features will be added. You can therefore reuse the config.json from previous versions of BAAuto by simply copying and pasting it.
 
 ## Table of Contents
 - [Requirements on Windows](#requirements-on-windows)
@@ -31,6 +33,7 @@ UPDATE: Another project, [MaaAssistantArknights/MBA](https://github.com/MaaAssis
 - [Installation and Usage](#installation-and-usage)
 - [Known Bugs](#known-bugs)
 - [Acknowledgment](#acknowledgment)
+- [Other Blue Archive Scripts](#other-blue-archive-scripts)
 
 ## Requirements on Windows
 To use BAAuto effectively, you'll need the following:
@@ -69,7 +72,7 @@ Follow these steps to get BAAuto up and running:
 6. For Event, you need to upload a cropped image of the event banner (without a background) in the `assets/EN/goto` or `assets/CN/goto` directory and save it as `event_banner.png`.
 7. Avoid setting the number of sweeps higher than 30, as this may cause BAAuto to assume the game is stuck.
 8. If you've enabled "Tap Students" in the Cafe, make sure to zoom out and swipe to the bottom-left corner before starting the script. You can make a pull request if you have a solution for zooming out using ADB.
-9. If you've selected "Exit Emulator" or "Exit BAAuto and Emulator", provide the emulator path. For BlueStacks instances, create a shortcut for Blue Archive from the instance and choose it as the emulator path to ensure BAAuto only closes that specific instance.
+9. If you've selected "Exit Emulator" or "Exit BAAuto and Emulator", provide the emulator path. For BlueStacks instances, create a shortcut for Blue Archive from the instance and choose it as the emulator path to ensure BAAuto only closes that specific instance. Also, launch Blue Archive from the shortcut everytime you plan to close it with BAAuto.
 10. If you'd like to create new assets, you can refer to [this guide](https://github.com/Egoistically/ALAuto/wiki/Creating-new-assets-for-bot).
 
 Please feel free to use and modify BAAuto as you see fit. Your feedback and contributions are always welcome.
@@ -90,3 +93,17 @@ I'd like to express my gratitude to the following individuals, listed in no part
 - [hgjhgj](https://github.com/hgjazhgj): Created the OCR library BAAuto is using and the first to star the repository, which greatly motivated me.
 - [LmeSzinc](https://github.com/LmeSzinc) and [MistEO](https://github.com/MistEO): Creators of Alas and MAA, respectively, who inspired me to develop BAAuto.
 - [TomSchimansky](https://github.com/TomSchimansky): Created customtkinter, making it possible for an inexperienced programmer like me to create a modern GUI.
+
+## Other Blue Archive Scripts
+Many people have created Blue Archive scripts for different servers.
+
+- [ArisuAutoSweeper](https://github.com/TheFunny/ArisuAutoSweeper): Blue Archive Automation Script for JP and Global EN
+- [baas](https://github.com/baas-pro/baas): Blue Archive Auto Script for CN
+- [BlueArchiveAutoScript](https://github.com/pur1fying/blue_archive_auto_script): BAAS, used to implement Blue Archive
+  automation for CN
+- [MBA](https://github.com/MaaAssistantArknights/MBA): BA assistant based on the new architecture of MAA, support planned for all servers but in hiatus
+
+
+
+
+
