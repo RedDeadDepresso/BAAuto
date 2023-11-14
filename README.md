@@ -20,7 +20,7 @@
 
 ![example](https://github.com/RedDeadDepresso/BAAuto/assets/94017243/8c661360-5667-401a-986d-3fb0f7400462)
 
-BAAuto is a Python-based automation script designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's [ALAuto](https://github.com/Egoistically/ALAuto), With a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming. It's only for the Global server with support for English and Chinese languages but you can find other Blue Archive scripts for different servers [here](#other-blue-archive-scripts).
+BAAuto is a Python-based automation script designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's [ALAuto](https://github.com/Egoistically/ALAuto) and with a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming. It's only for the Global server with support for English and Chinese languages but you can find other Blue Archive scripts for different servers [here](#other-blue-archive-scripts).
 
 
 UPDATE: I'm currently adapting [ArisuAutoSweeper](https://github.com/TheFunny/ArisuAutoSweeper), a script for Blue Archive built on the Alas framework, to EN. This decision stems from the fact that BAAuto is sluggish, lacks optimisation, and has a buggy GUI. Also, some of BAAuto's features will be implemented into ArisuAutoSweeper. 
