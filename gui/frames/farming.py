@@ -199,16 +199,19 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             self.template_buttons_frame = customtkinter.CTkFrame(i)
             self.template_buttons_frame.grid(row=3, column=0)
 
+            self.highlight_label = customtkinter.CTkLabel(self.template_buttons_frame, text="*You can double click an entry and press up or down arrow to change its position", font=customtkinter.CTkFont(family="Inter", size=12))
+            self.highlight_label.grid(row=0, column=0, columnspan=3)
+
             self.add_button = customtkinter.CTkButton(self.template_buttons_frame , text="Add", command=lambda queue=queue: self.add_frame(queue=queue))
-            self.add_button.grid(row=0, column=0, padx=5, pady=5)
+            self.add_button.grid(row=1, column=0, padx=5, pady=5)
 
             # Clear button to clear all frames
             self.clear_button = customtkinter.CTkButton(self.template_buttons_frame, text="Clear All", command=lambda queue=queue: self.clear_frames(queue=queue), fg_color="crimson")
-            self.clear_button.grid(row=0, column=1, padx=5, pady=5)
+            self.clear_button.grid(row=1, column=1, padx=5, pady=5)
 
             # Save button to save data
             self.save_button = customtkinter.CTkButton(self.template_buttons_frame, text="Save", command=lambda queue=queue: self.save_data(queue=queue), fg_color="#DC621D")
-            self.save_button.grid(row=0, column=2, padx=5, pady=5)
+            self.save_button.grid(row=1, column=2, padx=5, pady=5)
             if queue:
                 self.queue_buttons = [self.add_button, self.clear_button, self.save_button]
 
@@ -224,6 +227,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
     def create_frame_lists(self):
         self.template_frames = []
         self.queue_frames = []
+        self.highlighted_frame = None
 
     # Helper method to initialize Preferred Template and Templates List
     def initialize_preferred_template(self):
@@ -306,7 +310,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         parent_frame = self.queue_frame if queue else self.template_frame
         row_index = len(frames) + 1  # Calculate the row for the new frame
         # Create a frame
-        frame = customtkinter.CTkFrame(parent_frame)
+        frame = tk.Frame(parent_frame, bg="gray17")
         frame.grid(row=row_index, column=0, columnspan=4, padx=10, pady=10, sticky="w")
         frames.append(frame)
         # "Up" button to move the frame up
@@ -334,6 +338,8 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         # Delete button to delete the frame
         delete_button = customtkinter.CTkButton(frame, text="Delete", width=5, command=lambda f=frame, queue=queue: self.delete_frame(f, queue), state=state)
         delete_button.grid(row=0, column=5, padx=5, pady=5, sticky="w")
+
+        frame.bind("<Double-Button-1>", lambda event, f=frame: self.highlight_frame(f))
 
     # Function to clear all frames
     def clear_frames(self, queue=False):
@@ -409,3 +415,24 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         frame.destroy()
         # Update the positions of remaining frames
         self.update_frame_positions(queue=queue)
+
+    def highlight_frame(self, frame):
+        try:
+            if self.highlighted_frame is not None:
+                self.highlighted_frame.unbind("<Up>")
+                self.highlighted_frame.unbind("<Down>")
+                self.highlighted_frame.config(bg="gray17")
+        except:
+            pass
+        
+        if self.highlighted_frame == frame:
+            self.highlighted_frame = None
+            
+        else:
+            up_button = frame.winfo_children()[0]
+            down_button = frame.winfo_children()[1]
+            frame.config(bg="yellow")
+            frame.bind("<Up>", lambda event: up_button.invoke())
+            frame.bind("<Down>", lambda event: down_button.invoke())
+            frame.focus_set()
+            self.highlighted_frame = frame

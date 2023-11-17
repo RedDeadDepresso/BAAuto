@@ -70,7 +70,11 @@ class CTkIntegerSpinbox(customtkinter.CTkFrame):
         self.entry.delete(0, "end")
         self.entry.insert(0, max(self.min_value, value))  # Ensure the value is not less than 0
 
-    def configure(self, state):
-        self.subtract_button.configure(state=state)
-        self.add_button.configure(state=state)
-        self.entry.configure(state=state)
+    def configure(self, **kwargs):
+        state = kwargs.get("state", None)
+        if state is not None:
+            self.subtract_button.configure(state=state)
+            self.add_button.configure(state=state)
+            self.entry.configure(state=state)
+            kwargs.pop("state")
+        super().configure(**kwargs)
