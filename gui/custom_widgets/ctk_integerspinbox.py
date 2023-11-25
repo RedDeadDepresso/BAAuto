@@ -72,9 +72,13 @@ class CTkIntegerSpinbox(customtkinter.CTkFrame):
 
     def configure(self, **kwargs):
         state = kwargs.get("state", None)
+        command = kwargs.get("command", None)
         if state is not None:
             self.subtract_button.configure(state=state)
             self.add_button.configure(state=state)
             self.entry.configure(state=state)
             kwargs.pop("state")
+        if command is not None:
+            self.command = command
+            kwargs.pop("command")
         super().configure(**kwargs)

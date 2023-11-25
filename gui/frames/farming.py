@@ -15,6 +15,7 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.config = config
         self.create_widgets()
         # Load Template Data
+        self.bind_to_config()
         self.load_template_data()
         # Load queue Data
         self.load_queue_data()
@@ -30,9 +31,8 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.create_mission_commissions_widgets()
 
     def create_bounty_widgets(self):
-        self.bounty_checkbox = customtkinter.CTkCheckBox(self, text="Bounty", command=lambda x=["farming", "bounty", "enabled"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
+        self.bounty_checkbox = customtkinter.CTkCheckBox(self, text="Bounty", font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
         self.bounty_checkbox.grid(row=1, column=0, sticky="nw", padx=20, pady=20)   
-        self.linker.widgets["farming"]["bounty"]["enabled"] = self.bounty_checkbox
         values = ["0" + str(x) for x in range(1, 10)]
 
         for index, element in enumerate(["overpass", "desert_railroad", "classroom"]):
@@ -49,9 +49,8 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             self.linker.widgets["farming"]["bounty"][element]["run_times"] = spinbox
 
     def create_scrimmage_widgets(self):
-        self.scrimmage_checkbox = customtkinter.CTkCheckBox(self, text="Scrimmage", command=lambda x=["farming", "scrimmage", "enabled"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
+        self.scrimmage_checkbox = customtkinter.CTkCheckBox(self, text="Scrimmage", font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
         self.scrimmage_checkbox.grid(row=5, column=0, sticky="nw", padx=20, pady=20)
-        self.linker.widgets["farming"]["scrimmage"]["enabled"] = self.scrimmage_checkbox
 
         values = ["0" + str(x) for x in range(1, 10)]
 
@@ -69,16 +68,14 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
             self.linker.widgets["farming"]["scrimmage"][element]["run_times"] = spinbox
 
     def create_tactical_challenge_widgets(self):
-        self.tactical_checkbox = customtkinter.CTkCheckBox(self, text="Tactical Challenge", command=lambda x=["farming", "tactical_challenge", "enabled"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
+        self.tactical_checkbox = customtkinter.CTkCheckBox(self, text="Tactical Challenge", font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"))
         self.tactical_checkbox.grid(row=9, column=0, sticky="nw", padx=20, pady=20)
-        self.linker.widgets["farming"]["tactical_challenge"]["enabled"] = self.tactical_checkbox
 
         self.rank_label = customtkinter.CTkLabel(self, text="Rank", font=customtkinter.CTkFont(family="Inter", size=16))
         self.rank_label.grid(row=10, column=0, sticky="nw", padx=80)
 
-        self.rank_optionmenu = customtkinter.CTkOptionMenu(self, values=["highest", "middle", "lowest"], command=lambda x, y=["farming", "tactical_challenge", "rank"]: self.config.save_to_json(y))
+        self.rank_optionmenu = customtkinter.CTkOptionMenu(self, values=["highest", "middle", "lowest"])
         self.rank_optionmenu.grid(row=10, column=1)
-        self.linker.widgets["farming"]["tactical_challenge"]["rank"] = self.rank_optionmenu
 
 
     def create_mission_commissions_widgets(self):
@@ -119,11 +116,10 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
     def create_mission_commissions_checkbox(self):
         self.mission_commissions_checkbox = customtkinter.CTkCheckBox(self, text="Mission/\nCommissions/Event", width=60, font=customtkinter.CTkFont(family="Inter", size=20, weight="bold"), command=lambda x=["farming", "mission", "enabled"]: self.config.save_to_json(x))
         self.mission_commissions_checkbox.grid(row=11, column=0, sticky="nw", padx=20, pady=20)
-        self.linker.widgets["farming"]["mission"]["enabled"] = self.mission_commissions_checkbox
 
     # Helper method to create Reset Daily Widgets
     def create_reset_daily_widgets(self):
-        self.reset_daily = customtkinter.CTkCheckBox(self, text="Reset Daily", font=customtkinter.CTkFont(family="Inter", size=16, underline=True), command=lambda x=["farming", "mission", "reset_daily"]: self.config.save_to_json(x))
+        self.reset_daily = customtkinter.CTkCheckBox(self, text="Reset Daily", font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.reset_daily.grid(row=12, column=0, sticky="nw", padx=80)
         self.reset_daily_tooltip = CTkToolTip(self.reset_daily, wraplength=400,
                                               message="If enabled and if current time >= reset time,\
@@ -134,24 +130,16 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
 
         self.reset_time = CTkTimeEntry(self)
         self.reset_time.grid(row=12, column=1)
-        self.reset_time.hour_entry.bind("<KeyRelease>", lambda event, x=["farming", "mission", "reset_time"]: self.config.save_to_json(x))
-        self.reset_time.minute_entry.bind("<KeyRelease>", lambda event, x=["farming", "reset_time"]: self.config.save_to_json(x))
-        self.reset_time.second_entry.bind("<KeyRelease>", lambda event, x=["farming", "reset_time"]: self.config.save_to_json(x))
-
-        self.linker.widgets["farming"]["mission"]["reset_daily"] = self.reset_daily
-        self.linker.widgets["farming"]["mission"]["reset_time"] = self.reset_time
 
     # Helper method to create Recharge AP and Event Checkboxes
     def create_recharge_and_event_checkboxes(self):
-        self.recharge_checkbox = customtkinter.CTkCheckBox(self, text="Recharge AP", command=lambda x=["farming", "mission", "recharge_ap"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
+        self.recharge_checkbox = customtkinter.CTkCheckBox(self, text="Recharge AP", font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.recharge_checkbox.grid(row=14, column=0, sticky="nw", padx=80, pady=20)
-        self.linker.widgets["farming"]["mission"]["recharge_ap"] = self.recharge_checkbox
         self.recharge_tooltip = CTkToolTip(self.recharge_checkbox, wraplength=400,
                                               message="When enabled, recharge AP when low via cafe earnings and claim rewards, if they are enabled in their respective sections.")
-        self.event_checkbox = customtkinter.CTkCheckBox(self, text="Sweep Event Stages", command=lambda x=["farming", "mission", "event"]: self.config.save_to_json(x), font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
+        self.event_checkbox = customtkinter.CTkCheckBox(self, text="Sweep Event Stages", font=customtkinter.CTkFont(family="Inter", size=16, underline=True))
         self.event_tooltip = CTkToolTip(self.event_checkbox, wraplength=400, message="When enabled, the script will sweep event stages. Otherwise, it will ignore them.")
         self.event_checkbox.grid(row=15, column=0, sticky="nw", padx=80)
-        self.linker.widgets["farming"]["mission"]["event"] = self.event_checkbox
 
     # Helper method to create Preferred Template Selection
     def create_preferred_template_selection(self):
@@ -162,9 +150,40 @@ class FarmingFrame(customtkinter.CTkScrollableFrame):
         self.preferred_template_label.grid(row=16, column=0, pady=20)
         self.preferred_template_tooltip = CTkToolTip(self.preferred_template_label, wraplength=400,
                                               message="The template from which to repopulate the queue when it is empty or reset daily is activated")
-        self.preferred_template_optionmenu = customtkinter.CTkOptionMenu(self, values=self.templates_list, command=lambda x, y=["farming", "mission", "preferred_template"]: self.config.save_to_json(y))
+        self.preferred_template_optionmenu = customtkinter.CTkOptionMenu(self, values=self.templates_list)
         self.preferred_template_optionmenu.grid(row=16, column=1, pady=20)
-        self.linker.widgets["farming"]["mission"]["preferred_template"] = self.preferred_template_optionmenu
+
+    def bind_to_config(self):
+        # Bind bounty checkbox
+        self.config.bind(self.bounty_checkbox, ["farming", "bounty", "enabled"])
+
+        # Bind scrimmage checkbox
+        self.config.bind(self.scrimmage_checkbox, ["farming", "scrimmage", "enabled"])
+
+        # Bind tactical challenge checkbox
+        self.config.bind(self.tactical_checkbox, ["farming", "tactical_challenge", "enabled"])
+
+        self.config.bind(self.rank_optionmenu, ["farming", "tactical_challenge", "rank"])
+
+        # Bind mission/commissions/event checkbox
+        self.config.bind(self.mission_commissions_checkbox, ["farming", "mission", "enabled"])
+
+        # Bind reset daily checkbox
+        self.config.bind(self.reset_daily, ["farming", "mission", "reset_daily"])
+
+        self.linker.widgets["farming"]["mission"]["reset_time"] = self.reset_time
+        self.reset_time.hour_entry.bind("<KeyRelease>", lambda event, x=["farming", "mission", "reset_time"]: self.config.save_to_json(x))
+        self.reset_time.minute_entry.bind("<KeyRelease>", lambda event, x=["farming", "reset_time"]: self.config.save_to_json(x))
+        self.reset_time.second_entry.bind("<KeyRelease>", lambda event, x=["farming", "reset_time"]: self.config.save_to_json(x))
+
+        # Bind recharge AP checkbox
+        self.config.bind(self.recharge_checkbox, ["farming", "mission", "recharge_ap"])
+
+        # Bind event checkbox
+        self.config.bind(self.event_checkbox, ["farming", "mission", "event"])
+
+        # Bind preferred template option menu
+        self.config.bind(self.preferred_template_optionmenu, ["farming", "mission", "preferred_template"])
 
     # Helper method to create Mission Tabview with Template and Queue Tabs
     def create_mission_tabview(self):

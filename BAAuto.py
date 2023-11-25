@@ -13,6 +13,7 @@ from gui.frames.sidebar import Sidebar
 from gui.frames.logger import LoggerTextBox
 from gui.custom_widgets.ctk_notification import CTkNotification
 from gui.custom_widgets.ctkmessagebox import CTkMessagebox
+from gui.custom_widgets.ctk_integerspinbox import CTkIntegerSpinbox
 
 class Config:
     def __init__(self, linker, config_file):
@@ -62,6 +63,23 @@ class Config:
                         widgets[key].insert(0, config_data[key])
                     else:                    
                         widgets[key].set(config_data[key])
+
+    def bind(self, widget, list_keys):
+
+        if isinstance(widget, customtkinter.CTkEntry):
+            widget.bind("<KeyRelease>", lambda event, x=list_keys: self.save_to_json(x))
+        elif isinstance(widget, CTkIntegerSpinbox):
+            widget.configure(command=lambda x=list_keys: self.save_to_json(x))
+            widget.entry.bind("<KeyRelease>", lambda event, x=list_keys: self.save_to_json(x))
+        elif isinstance(widget, (customtkinter.CTkCheckBox)):
+            widget.configure(command=lambda x=list_keys: self.save_to_json(x))
+        else:
+            widget.configure(command=lambda x, y=list_keys: self.save_to_json(y))
+
+        widgets_dictionary = self.linker.widgets
+        for key in list_keys[:-1]:
+            widgets_dictionary = widgets_dictionary[key]
+        widgets_dictionary[list_keys[-1]] = widget
 
     def save_to_json(self, list_keys):
         widget = self.linker.widgets
@@ -161,6 +179,7 @@ class Linker:
         farming_frame = self.modules_dictionary["farming"]["frame"]
         farming_frame.clear_frames(queue=True)
         new_config_data = self.config.read()
+        self.config.config_data["farming"]['mission']['last_run'] = new_config_data["farming"]['mission']['last_run']
         self.config.config_data["farming"]['mission']['queue'] = new_config_data["farming"]['mission']['queue']
         for entry in self.config.config_data["farming"]['mission']['queue']:
             farming_frame.add_frame(entry, queue=True)
