@@ -1,30 +1,12 @@
 # BAAuto: Blue Archive Automation Script
-
-<p align="center">
-  <a href="https://github.com/RedDeadDepresso/BAAuto--gh-stats/commits/master/traffic/views">
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20views|all&query=count&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/views/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub views|any|total" />
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=count&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/views/latest.json?raw=True" valign="middle" alt="GitHub views|any|14d" /></a>
-• <a href="https://github.com/RedDeadDepresso/BAAuto--gh-stats/commits/master/traffic/views">
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20views|unq&query=uniques&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/views/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub views|unique per day|total" />
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=uniques&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/views/latest.json?raw=True" valign="middle" alt="GitHub views|unique per day|14d" /></a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/RedDeadDepresso/BAAuto--gh-stats/commits/master/traffic/clones">
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20clones|all&query=count&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/clones/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub clones|any|total" />
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=count&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/clones/latest.json?raw=True" valign="middle" alt="GitHub clones|any|14d" /></a>
-• <a href="https://github.com/RedDeadDepresso/BAAuto--gh-stats/commits/master/traffic/clones">
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=Github%20clones|unq&query=uniques&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/clones/latest-accum.json?raw=True&logo=github" valign="middle" alt="GitHub clones|unique per day|total" />
-    <img src="https://img.shields.io/badge/dynamic/json?color=success&label=14d&query=uniques&url=https://github.com/RedDeadDepresso/BAAuto--gh-stats/raw/master/traffic/clones/latest.json?raw=True" valign="middle" alt="GitHub clones|unique per day|14d" /></a>
-</p>
-
 ![example](https://github.com/RedDeadDepresso/BAAuto/assets/94017243/8c661360-5667-401a-986d-3fb0f7400462)
 
 BAAuto is a Python-based automation script designed to streamline various tasks in Blue Archive. It's a modified version of Egoistically's [ALAuto](https://github.com/Egoistically/ALAuto) and with a user-friendly GUI, BAAuto simplifies tasks such as login, cafe, bounty, scrimmage, tactical challenge, mission, and reward claiming. It's only for the Global server with support for English and Chinese languages but you can find other Blue Archive scripts for different servers [here](#other-blue-archive-scripts).
 
+~~UPDATE: I'm currently adapting [ArisuAutoSweeper](https://github.com/TheFunny/ArisuAutoSweeper), a script for Blue Archive built on the Alas framework, to EN. This decision stems from the fact that BAAuto is sluggish, lacks optimisation, and has a buggy GUI. Also, some of BAAuto's features will be implemented into ArisuAutoSweeper. 
+I will try to fix any bugs I encounter in BAAuto during this process but no new features will be added. You can therefore reuse the config.json from previous versions of BAAuto by simply copying and pasting it.~~ 
 
-UPDATE: I'm currently adapting [ArisuAutoSweeper](https://github.com/TheFunny/ArisuAutoSweeper), a script for Blue Archive built on the Alas framework, to EN. This decision stems from the fact that BAAuto is sluggish, lacks optimisation, and has a buggy GUI. Also, some of BAAuto's features will be implemented into ArisuAutoSweeper. 
-I will try to fix any bugs I encounter in BAAuto during this process but no new features will be added. You can therefore reuse the config.json from previous versions of BAAuto by simply copying and pasting it.
+UPDATE: BAAuto will be no longer maintained.
 
 ## Table of Contents
 - [Requirements on Windows](#requirements-on-windows)
